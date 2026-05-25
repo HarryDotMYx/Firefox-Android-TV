@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.architecture
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.hint.HintContentFactory
 import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
@@ -20,7 +19,7 @@ import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
 import org.mozilla.tv.firefox.webrender.WebRenderViewModel
 
 /**
- * Used by [ViewModelProviders] to instantiate [ViewModel]s with constructor arguments.
+ * Used by [ViewModelProvider] to instantiate [ViewModel]s with constructor arguments.
  *
  * This should be used through [FirefoxViewModelProviders.of].
  * Example usage:

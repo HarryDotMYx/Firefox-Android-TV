@@ -125,8 +125,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        if (url == URLs.APP_URL_HOME) serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, true)
+        if (url == URLs.APP_URL_HOME) serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, true)
         youtubeBackHandler.onUrlChanged(url)
+
+        // Show banner only on home page
+        binding.bannerLayout.isGone = url != URLs.APP_URL_HOME
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
@@ -164,10 +167,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // Setup the banner
         binding.bannerMoreInfoButton.setOnClickListener {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
-            context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+            context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
         }
 
         binding.progressBar.initialize(this)
+
+        // Show banner only on home page
+        binding.bannerLayout.isGone = session.url != URLs.APP_URL_HOME
 
         // We break encapsulation here: we should use the super.engineView reference but it's not init until
         // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class

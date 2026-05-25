@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -23,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.transition.Fade
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -48,6 +48,7 @@ import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
 import org.mozilla.tv.firefox.hint.HintBinder
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -111,20 +112,20 @@ class NavigationOverlayFragment : Fragment() {
         when (event) {
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
-                context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+                context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
             }
             NavigationEvent.LOAD_TILE -> {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
-                context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+                context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
             }
             NavigationEvent.SETTINGS_DATA_COLLECTION -> {
-                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.DATA_COLLECTION)
+                serviceLocator.screenController.showSettingsScreen(parentFragmentManager, SettingsScreen.DATA_COLLECTION)
             }
             NavigationEvent.SETTINGS_CLEAR_COOKIES -> {
-                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.CLEAR_COOKIES)
+                serviceLocator.screenController.showSettingsScreen(parentFragmentManager, SettingsScreen.CLEAR_COOKIES)
             }
             NavigationEvent.FXA_BUTTON -> {
-                navigationOverlayViewModel.fxaButtonClicked(fragmentManager!!)
+                navigationOverlayViewModel.fxaButtonClicked(parentFragmentManager)
             }
 
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
@@ -150,7 +151,7 @@ class NavigationOverlayFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        serviceLocator = context!!.serviceLocator
+        serviceLocator = requireContext().serviceLocator
 
         navigationOverlayViewModel = FirefoxViewModelProviders.of(this).get(NavigationOverlayViewModel::class.java)
         toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
@@ -179,7 +180,7 @@ class NavigationOverlayFragment : Fragment() {
 
         binding.bannerMoreInfoButton.setOnClickListener {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
-            context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+            context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
         }
 
         return view
@@ -210,6 +211,10 @@ class NavigationOverlayFragment : Fragment() {
 
         topNavBinding.exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
         topNavBinding.fxaButton.contentDescription = getString(R.string.fxa_navigation_item_new, getString(R.string.app_name))
+
+        // Show banner only on home page
+        val currentSession = serviceLocator.sessionManager.selectedSession
+        binding.bannerLayout.isVisible = currentSession?.url == URLs.APP_URL_HOME
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(requireContext(), R.color.photonGrey10_a60p)) }
         binding.navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
@@ -268,7 +273,7 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun exitFirefox() {
-        activity!!.moveTaskToBack(true)
+        requireActivity().moveTaskToBack(true)
     }
 
     // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
@@ -296,10 +301,10 @@ class NavigationOverlayFragment : Fragment() {
                         topNavBinding.fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                         topNavBinding.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
 
-                        val settings = Settings.getInstance(context!!)
+                        val settings = Settings.getInstance(requireContext())
                         if (settings.shouldShowFxaOnboarding()) {
-                            serviceLocator.screenController.showNavigationOverlay(fragmentManager, true)
-                            fxaRepo.showFxaOnboardingScreen(context!!)
+                            serviceLocator.screenController.showNavigationOverlay(parentFragmentManager, true)
+                            fxaRepo.showFxaOnboardingScreen(requireContext())
                         }
                     }
                     AccountState.Initial -> {
@@ -324,7 +329,7 @@ class NavigationOverlayFragment : Fragment() {
      * We need to reset the state of FxA onboarding screen to ensure that we do not show onboarding on every startup (#2861).
      */
     private fun resetFxaOnboardingShown() {
-        PreferenceManager.getDefaultSharedPreferences(context)
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
             .edit()
             .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, false)
             .apply()
@@ -418,10 +423,10 @@ class NavigationOverlayFragment : Fragment() {
                 }
             },
             onTileFocused = {
-                val prefInt = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+                val prefInt = PreferenceManager.getDefaultSharedPreferences(requireContext()).getInt(
                         SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
                 if (prefInt < MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
-                    PreferenceManager.getDefaultSharedPreferences(context)
+                    PreferenceManager.getDefaultSharedPreferences(requireContext())
                             .edit()
                             .putInt(SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
                             .apply()
@@ -434,7 +439,7 @@ class NavigationOverlayFragment : Fragment() {
                     // We believe this delays in order to avoid speaking over the focus
                     // change announcement. However this is taken legacy code, so there
                     // may be other reasons as well
-                    if (context!!.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
+                    if (requireContext().isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
                     else showToast.invoke()
 
                     canShowUnpinToast = false

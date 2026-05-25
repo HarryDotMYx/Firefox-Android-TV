@@ -40,8 +40,8 @@ class ToolbarViewModel(
     )
 
     sealed class Action {
-        data class ShowTopToast(@StringRes val textId: Int) : Action()
-        data class ShowBottomToast(@StringRes val textId: Int) : Action()
+        data class ShowTopToast(@param:StringRes val textId: Int) : Action()
+        data class ShowBottomToast(@param:StringRes val textId: Int) : Action()
         data class SetOverlayVisible(val visible: Boolean) : Action()
         object ExitFirefox : Action()
     }

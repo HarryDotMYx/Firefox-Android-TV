@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -80,6 +81,7 @@ private val BITMAP_FACTORY_OPTIONS = BitmapFactory.Options().apply {
  *
  * This class is thread-safe: see [uuidToFileSystemMutex] javadoc for details.
  */
+@OptIn(DelicateCoroutinesApi::class)
 object PinnedTileScreenshotStore {
 
     @VisibleForTesting const val DIR = "home_screenshots"

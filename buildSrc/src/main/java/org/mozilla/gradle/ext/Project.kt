@@ -4,9 +4,8 @@
 
 package org.mozilla.gradle.ext
 
-import com.android.build.gradle.BaseExtension
 import org.gradle.api.Project
 
-fun Project.androidExtension(): BaseExtension {
-    return extensions.getByType(BaseExtension::class.java)
+fun Project.androidExtension(): Any {
+    return extensions.getByName("android")
 }

@@ -27,6 +27,7 @@ import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
+import org.mozilla.tv.firefox.utils.PicassoWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderComponents
 import java.util.UUID
@@ -69,6 +70,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
             // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
             SentryIntegration.init(this, serviceLocator.settingsRepo)
 
+            PicassoWrapper.init(this)
             initRustDependencies()
             TelemetryIntegration.INSTANCE.init(this)
             initGlean()

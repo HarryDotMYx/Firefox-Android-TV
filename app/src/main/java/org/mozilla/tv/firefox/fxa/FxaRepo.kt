@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.fxa
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

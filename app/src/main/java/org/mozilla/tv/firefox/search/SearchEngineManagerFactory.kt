@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.search
 
 import android.app.Application
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mozilla.components.browser.search.SearchEngineManager
@@ -24,6 +25,7 @@ private val engineProvider = SearchEngineProviderWrapper(replacements)
  * Encapsulates [SearchEngineManager] setup in order to clean up the
  * [ServiceLocator]
  */
+@OptIn(DelicateCoroutinesApi::class)
 object SearchEngineManagerFactory {
 
     val AMAZON_SEARCH_CODE = "google-b-amzftv"

@@ -4,7 +4,9 @@
 
 package org.mozilla.tv.firefox.utils
 
+import android.content.Context
 import android.graphics.Bitmap
+import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Transformation
 import mozilla.components.support.ktx.android.graphics.withRoundedCorners
@@ -13,8 +15,28 @@ import mozilla.components.support.ktx.android.graphics.withRoundedCorners
  * A holder for the shared Picasso instance. All calls to Picasso should go through this class.
  */
 object PicassoWrapper {
+    private var instance: Picasso? = null
+
+    /**
+     * Initializes the shared Picasso instance with a custom OkHttpClient.
+     * This should be called in [FirefoxApplication.onCreate].
+     */
     @JvmStatic
-    val client get() = Picasso.get()
+    fun init(context: Context) {
+        if (instance == null) {
+            try {
+                instance = Picasso.Builder(context)
+                    .downloader(OkHttp3Downloader(OkHttpWrapper.client))
+                    .build()
+            } catch (e: Exception) {
+                // Fallback to default if initialization fails
+                instance = Picasso.get()
+            }
+        }
+    }
+
+    @JvmStatic
+    val client: Picasso get() = instance ?: Picasso.get()
 }
 
 /**

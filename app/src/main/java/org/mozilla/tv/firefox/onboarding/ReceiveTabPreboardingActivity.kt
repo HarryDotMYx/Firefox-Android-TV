@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.onboarding
 
 import org.mozilla.tv.firefox.databinding.ReceiveTabPreboardingBinding
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R

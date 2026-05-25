@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 import android.os.StrictMode
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.R
 

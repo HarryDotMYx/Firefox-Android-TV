@@ -5,7 +5,7 @@
 package org.mozilla.gradle.ext
 
 fun Runtime.execWaitForStdOut(cmd: String): String {
-    return Runtime.getRuntime().exec(cmd).let { process ->
+    return ProcessBuilder("cmd", "/c", cmd).start().let { process ->
         process.waitFor()
         process.inputStream.bufferedReader().use { it.readText() }
     }

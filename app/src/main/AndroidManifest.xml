@@ -15,11 +15,6 @@
 
     <!-- *** ADM permissions start *** -->
     <!-- This permission ensures that no other application can intercept your ADM messages. -->
-    <permission
-        android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE"
-        android:protectionLevel="signature"/>
-
-    <uses-permission android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE" />
     <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
 
     <!-- This permission is also brought in by androidx.work:work-runtime dependency. -->
@@ -31,7 +26,9 @@
 
     <!-- Attribute usesCleartextTraffic requires API 23+, tools:ignore="UnusedAttribute" for lint check-->
     <application
+        android:extractNativeLibs="true"
         android:allowBackup="false"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:banner="@mipmap/ic_launcher"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -39,7 +36,8 @@
         android:theme="@style/AppTheme"
         android:name=".FirefoxApplication"
         android:usesCleartextTraffic="true"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute"
+        tools:replace="android:appComponentFactory">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -162,6 +160,15 @@
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />
+
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
+
+        <provider
+            android:name="io.sentry.android.core.SentryInitProvider"
+            android:authorities="${applicationId}.SentryInitProvider"
+            tools:node="remove" />
 
         <!-- Turn of temporarily #1504
         <meta-data

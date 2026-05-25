@@ -9,8 +9,8 @@ import org.mozilla.tv.firefox.databinding.ContentOnboardingBinding
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 
@@ -23,7 +23,7 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        contentBinding = ContentOnboardingBinding.bind(binding.root)
+        contentBinding = binding.content
 
         setContent()
 

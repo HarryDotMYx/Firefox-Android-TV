@@ -56,7 +56,10 @@ object SentryIntegration {
                 // disabling the client: https://github.com/getsentry/sentry-java/issues/574#issuecomment-378406105
                 val sentryDsn = if (isEnabled) BuildConfig.SENTRY_DSN else null
                 SentryAndroid.init(appContext) { options ->
-                    options.dsn = sentryDsn
+                    // If you provide a null DSN to Sentry, it will disable upload and buffering to disk:
+                    // https://github.com/getsentry/sentry-java/issues/574#issuecomment-378298484
+                    // However, Sentry 6.x requires a DSN or explicitly setting enabled to false.
+                    options.dsn = sentryDsn ?: ""
                     options.isEnabled = sentryDsn != null
                 }
             }

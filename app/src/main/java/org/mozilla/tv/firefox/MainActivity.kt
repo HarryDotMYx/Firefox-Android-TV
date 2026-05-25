@@ -13,14 +13,15 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
+import androidx.core.view.WindowCompat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.sentry.Sentry
 import org.mozilla.tv.firefox.databinding.ActivityMainBinding
-import org.mozilla.tv.firefox.databinding.OverlayDebugBinding
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
@@ -68,6 +69,18 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // goes through onCreate.
         super.onCreate(savedInstanceState)
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (serviceLocator.screenController.handleBack(supportFragmentManager)) return
+
+                // If you're here that means there's nothing else in the fragment backstack; therefore, clear session
+                webRenderComponents.sessionManager.remove()
+
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        })
+
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
 
@@ -77,11 +90,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         lifecycle.addObserver(serviceLocator.engineViewCache)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val debugBinding = OverlayDebugBinding.bind(binding.root)
 
         val intentData = IntentValidator.validateOnCreate(this, safeIntent, savedInstanceState)
 
@@ -104,14 +116,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         })
 
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
-
-        // Debug logging display for non public users
-        // TODO: refactor out the debug variant visibility check in #1953
-        BuildConstants.debugLogStr?.apply {
-            val engineViewVersion = (this@MainActivity as Context).application.getEngineViewVersion()
-            debugBinding.debugLog.visibility = View.VISIBLE
-            debugBinding.debugLog.text = "$this $engineViewVersion"
-        }
     }
 
     @SuppressLint("MissingSuperCall")
@@ -251,15 +255,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 setupForApp()
             }
         } else super.onCreateView(parent, name, context, attrs)
-    }
-
-    override fun onBackPressed() {
-        if (serviceLocator.screenController.handleBack(supportFragmentManager)) return
-
-        // If you're here that means there's nothing else in the fragment backstack; therefore, clear session
-        webRenderComponents.sessionManager.remove()
-
-        super.onBackPressed()
     }
 
     private fun initMediaSession() {

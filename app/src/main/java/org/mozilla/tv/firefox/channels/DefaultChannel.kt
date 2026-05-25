@@ -16,10 +16,9 @@ import io.reactivex.Observable
  */
 class DefaultChannel(
     val channelContainer: ViewGroup,
-    private val adapter: DefaultChannelAdapter
+    private val adapter: DefaultChannelAdapter,
+    private val binding: DefaultChannelBinding
 ) {
-
-    private val binding = DefaultChannelBinding.bind(channelContainer)
 
     val focusChangeObservable get() = adapter.focusChangeObservable
 

@@ -12,5 +12,5 @@ import androidx.annotation.DrawableRes
 data class HintContent(
     val text: String,
     val contentDescription: String,
-    @DrawableRes val icon: Int
+    @param:DrawableRes val icon: Int
 )

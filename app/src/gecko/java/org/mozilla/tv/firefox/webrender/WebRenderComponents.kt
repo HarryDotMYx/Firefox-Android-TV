@@ -42,6 +42,10 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 appName = applicationContext.resources.getString(R.string.useragent_appname))
 
         val runtimeSettingsBuilder = GeckoRuntimeSettings.Builder()
+        // Pass necessary flags to disable features that crash on modern Android (API 29+)
+        // due to ashmem/sandbox restrictions.
+        runtimeSettingsBuilder.arguments(arrayOf("--disable-gpu-sandbox", "--disable-sandbox"))
+
         if (BuildConstants.isDevBuild) {
             // In debug builds, allow to invoke via an Intent that has extras customizing Gecko.
             // In particular, this allows to add command line arguments for custom profiles, etc.

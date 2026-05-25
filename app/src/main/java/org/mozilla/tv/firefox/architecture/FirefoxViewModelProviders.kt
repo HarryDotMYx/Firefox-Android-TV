@@ -4,10 +4,9 @@
 
 package org.mozilla.tv.firefox.architecture
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import org.mozilla.tv.firefox.ext.serviceLocator
 
 /**
@@ -18,11 +17,11 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 object FirefoxViewModelProviders {
 
     fun of(activity: FragmentActivity): ViewModelProvider {
-        return ViewModelProviders.of(activity, activity.serviceLocator.viewModelFactory)
+        return ViewModelProvider(activity, activity.serviceLocator.viewModelFactory)
     }
 
     fun of(fragment: Fragment): ViewModelProvider {
         // If we're attempting to retrieve a view model, we should be attached to a context already.
-        return ViewModelProviders.of(fragment, fragment.context!!.serviceLocator.viewModelFactory)
+        return ViewModelProvider(fragment, fragment.context!!.serviceLocator.viewModelFactory)
     }
 }

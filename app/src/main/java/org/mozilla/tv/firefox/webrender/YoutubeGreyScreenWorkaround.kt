@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.webrender
 
 import android.app.Activity
 import android.view.KeyEvent
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
  * - Scrolling webview
  * - Sending non-view-changing key events
  */
+@OptIn(DelicateCoroutinesApi::class)
 object YoutubeGreyScreenWorkaround {
     fun invoke(activity: Activity?) {
         GlobalScope.launch(Dispatchers.Main) {

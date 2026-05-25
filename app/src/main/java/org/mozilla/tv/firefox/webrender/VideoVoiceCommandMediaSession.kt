@@ -4,13 +4,8 @@
 
 package org.mozilla.tv.firefox.webrender
 
-import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
-import androidx.lifecycle.Lifecycle.Event.ON_PAUSE
-import androidx.lifecycle.Lifecycle.Event.ON_RESUME
-import androidx.lifecycle.Lifecycle.Event.ON_START
-import androidx.lifecycle.Lifecycle.Event.ON_STOP
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import android.content.Intent
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
@@ -92,7 +87,7 @@ private val KEY_CODES_MEDIA_PLAY_PAUSE = listOf(KEYCODE_MEDIA_PLAY, KEYCODE_MEDI
  */
 class VideoVoiceCommandMediaSession @UiThread constructor(
     private val activity: AppCompatActivity
-) : LifecycleObserver {
+) : DefaultLifecycleObserver {
 
     @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread // MediaSession is not thread safe.
@@ -143,18 +138,15 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         this.sessionIsLoadingObserver = null
     }
 
-    @OnLifecycleEvent(ON_RESUME)
-    fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
         isLifecycleResumed = true
     }
 
-    @OnLifecycleEvent(ON_PAUSE)
-    fun onPause() {
+    override fun onPause(owner: LifecycleOwner) {
         isLifecycleResumed = false
     }
 
-    @OnLifecycleEvent(ON_START)
-    fun onStart() {
+    override fun onStart(owner: LifecycleOwner) {
         isLifecycleStarted = true
 
         // We want to make our MediaSession active: state buffering is more accurate than state
@@ -169,8 +161,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         mediaSession.isActive = true
     }
 
-    @OnLifecycleEvent(ON_STOP)
-    fun onStop() {
+    override fun onStop(owner: LifecycleOwner) {
         isLifecycleStarted = false
 
         // Videos playing when the app was backgrounded get into an inconsistent state: `paused`
@@ -191,8 +182,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         mediaSession.isActive = false
     }
 
-    @OnLifecycleEvent(ON_DESTROY)
-    fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
         mediaSession.release()
         uiLifecycleCancelJob.cancel()
     }
@@ -287,7 +277,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
          * false for MediaSession to handle the event and stop system handling.
          */
         override fun onMediaButtonEvent(mediaButtonEvent: Intent): Boolean {
-            val key = mediaButtonEvent.getParcelableExtra<KeyEvent?>(Intent.EXTRA_KEY_EVENT)
+            val key = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
 
             if (KEY_CODES_MEDIA_PLAY_PAUSE.contains(key?.keyCode)) {
                 // Our overall goal is to see how often voice commands are used. play/pause are the

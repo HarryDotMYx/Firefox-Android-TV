@@ -5,10 +5,12 @@
 package org.mozilla.tv.firefox.utils.publicsuffix
 
 import android.content.Context
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 /** A helper to allow [PublicSuffix] to call Kotlin code: converting the whole file didn't seem right. */
+@OptIn(DelicateCoroutinesApi::class)
 internal object PublicSuffixKt {
 
     // We want to execute this on our existing common pool, which only Kotlin has access to so we

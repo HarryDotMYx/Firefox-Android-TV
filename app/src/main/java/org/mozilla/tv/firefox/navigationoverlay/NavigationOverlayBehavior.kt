@@ -36,6 +36,7 @@ class NavigationOverlayBehavior(context: Context, attrs: AttributeSet) : Coordin
         return true
     }
 
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onNestedScroll(
         coordinatorLayout: CoordinatorLayout,
         child: LinearLayout,

@@ -10,9 +10,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import mozilla.components.browser.engine.gecko.GeckoEngineView
 import org.mozilla.tv.firefox.ext.canGoBackTwice
 import org.mozilla.tv.firefox.ext.webRenderComponents
@@ -24,7 +23,7 @@ import org.mozilla.tv.firefox.session.SessionRepo
  * This allows us to maintain [WebView] state when the view would otherwise
  * be destroyed
  */
-class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
+class EngineViewCache(private val sessionRepo: SessionRepo) : DefaultLifecycleObserver {
 
     companion object {
         // According to Android docs, WebView.saveState and WebView.restoreState do "not restore
@@ -76,13 +75,11 @@ class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver 
         return cachedView ?: createAndCacheEngineView()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    private fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         shouldPersist = true
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onDestroy() {
+    override fun onDestroy(owner: LifecycleOwner) {
         clear()
     }
 

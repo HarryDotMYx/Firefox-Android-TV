@@ -49,7 +49,8 @@ class DefaultChannelFactory(
 
         return DefaultChannel(
                 channelContainer = containerView,
-                adapter = channelAdapter
+                adapter = channelAdapter,
+                binding = binding
         )
     }
 }

@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.channels
 
 import org.mozilla.tv.firefox.databinding.ChannelOnboardingBinding
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import org.mozilla.tv.firefox.R
 
 class ChannelOnboardingActivity : AppCompatActivity() {

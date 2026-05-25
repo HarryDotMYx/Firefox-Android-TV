@@ -7,8 +7,8 @@ package org.mozilla.tv.firefox.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
-import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
+import androidx.preference.PreferenceManager
 import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy
 import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.CookiePolicy
 import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.TrackingCategory

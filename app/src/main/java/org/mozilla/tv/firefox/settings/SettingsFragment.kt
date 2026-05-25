@@ -57,7 +57,7 @@ class SettingsFragment : Fragment() {
             }
         }
         view.findViewById<ImageButton>(R.id.backButton).setOnClickListener {
-            serviceLocator.screenController.handleBack(fragmentManager!!)
+            serviceLocator.screenController.handleBack(parentFragmentManager)
         }
 
         return view
@@ -101,10 +101,10 @@ class SettingsFragment : Fragment() {
         screenBinding = binding
         binding.confirmAction.setOnClickListener {
             settingsViewModel.clearBrowsingData(serviceLocator.engineViewCache)
-            serviceLocator.screenController.handleBack(fragmentManager!!)
+            serviceLocator.screenController.handleBack(parentFragmentManager)
         }
         binding.cancelAction.setOnClickListener {
-            serviceLocator.screenController.handleBack(fragmentManager!!)
+            serviceLocator.screenController.handleBack(parentFragmentManager)
         }
         return binding.root
     }
@@ -148,11 +148,11 @@ class SettingsFragment : Fragment() {
         }
         binding.buttonSignOut.setOnClickListener {
             fxaRepo.logout()
-            screenController.handleBack(fragmentManager!!)
+            screenController.handleBack(parentFragmentManager)
             telemetryIntegration.fxaProfileSignOutButtonClickEvent()
         }
         binding.backButton.setOnClickListener {
-            screenController.handleBack(fragmentManager!!)
+            screenController.handleBack(parentFragmentManager)
         }
     }
 

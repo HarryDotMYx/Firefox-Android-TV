@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,6 +40,7 @@ private val logger = Logger("FxaLoginUseCase")
  *           |
  *    FxaLoginUseCase
  */
+@OptIn(DelicateCoroutinesApi::class)
 class FxaLoginUseCase(
     private val fxaRepo: FxaRepo,
     private val sessionRepo: SessionRepo,
