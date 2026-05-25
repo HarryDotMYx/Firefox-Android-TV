@@ -18,7 +18,7 @@ buildscript {
 
     ext.test_core = '1.6.1'
     ext.test_runner = '1.6.2'
-    ext.test_rules = ext.test_runner
+    ext.test_rules = '1.6.1'
     ext.test_orchestrator = '1.5.0'
     ext.espresso_version = '3.6.1'
     ext.uiautomator_version = '2.3.0'
@@ -31,6 +31,7 @@ buildscript {
             url "https://maven.mozilla.org/maven2"
             content {
                 includeGroupByRegex Dependencies.RepoMatching.mozilla
+                includeGroup Dependencies.RepoMatching.mozillaTelemetry
             }
         }
     }
@@ -61,6 +62,7 @@ allprojects {
             url "https://maven.mozilla.org/maven2"
             content {
                 includeGroupByRegex Dependencies.RepoMatching.mozilla
+                includeGroup Dependencies.RepoMatching.mozillaTelemetry
             }
         }
     }

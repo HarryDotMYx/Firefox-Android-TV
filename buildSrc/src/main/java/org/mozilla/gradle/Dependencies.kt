@@ -16,6 +16,7 @@ object Dependencies {
      */
     object RepoMatching {
         const val mozilla = "org\\.mozilla\\..*"
+        const val mozillaTelemetry = "org.mozilla.telemetry"
         const val androidx = "androidx\\..*"
         const val comAndroid = "com\\.android\\..*"
 
