@@ -4,29 +4,32 @@
 
 package org.mozilla.tv.firefox.onboarding
 
+import org.mozilla.tv.firefox.databinding.ActivityOnboardingBinding
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.content_onboarding.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 
 class OnboardingActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityOnboardingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboarding)
+        binding = ActivityOnboardingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setContent()
 
-        enable_turbo_mode.setOnClickListener { _ ->
+        binding.contentOnboarding.enableTurboMode.setOnClickListener { _ ->
             setTurboMode(true)
             finish()
         }
 
-        disable_turbo_mode.setOnClickListener { _ ->
+        binding.contentOnboarding.disableTurboMode.setOnClickListener { _ ->
             setTurboMode(false)
             setResult(Activity.RESULT_OK, Intent())
             finish()
@@ -38,12 +41,12 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setContent() {
         val content = serviceLocator.experimentsProvider.getTurboModeOnboarding()
 
-        disable_turbo_mode.text = resources.getString(content.disableButtonTextId)
-        enable_turbo_mode.text = resources.getString(content.enableButtonTextId)
-        onboarding_main_text.text = resources.getString(content.descriptionId)
-        turbo_mode_title.text = resources.getString(content.titleId)
-        turbo_image_view.setImageResource(content.imageId)
-        turbo_image_view.contentDescription = resources.getString(content.imageContentDescriptionId)
+        binding.contentOnboarding.disableTurboMode.text = resources.getString(content.disableButtonTextId)
+        binding.contentOnboarding.enableTurboMode.text = resources.getString(content.enableButtonTextId)
+        binding.contentOnboarding.onboardingMainText.text = resources.getString(content.descriptionId)
+        binding.contentOnboarding.turboModeTitle.text = resources.getString(content.titleId)
+        binding.contentOnboarding.turboImageView.setImageResource(content.imageId)
+        binding.contentOnboarding.turboImageView.contentDescription = resources.getString(content.imageContentDescriptionId)
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {

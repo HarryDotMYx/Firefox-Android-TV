@@ -19,11 +19,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.dialog_channel_tiles.cancelButton
-import kotlinx.android.synthetic.main.dialog_channel_tiles.removeTileButton
-import kotlinx.android.synthetic.main.dialog_channel_tiles.titleText
+import org.mozilla.tv.firefox.databinding.DialogChannelTilesBinding
+import org.mozilla.tv.firefox.databinding.HomeTileBinding
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.home_tile.view.channel_cardview
 import org.mozilla.tv.firefox.R
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
@@ -56,8 +54,8 @@ class DefaultChannelAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.home_tile, parent, false)
-        return DefaultChannelTileViewHolder(view)
+        val binding = HomeTileBinding.inflate(inflater, parent, false)
+        return DefaultChannelTileViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: DefaultChannelTileViewHolder, position: Int) {
@@ -93,8 +91,8 @@ class DefaultChannelAdapter(
                     focusRingDrawable = null
                     animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator_not_focused)
                 }
-                itemView.channel_cardview.stateListAnimator = animation
-                itemView.channel_cardview.foreground = focusRingDrawable
+                binding.channelCardview.stateListAnimator = animation
+                binding.channelCardview.foreground = focusRingDrawable
                 _focusChangeObservable.onNext(position to hasFocus)
                 channelConfig.onFocusTelemetry?.invoke(tile, hasFocus)
             }
@@ -105,16 +103,17 @@ class DefaultChannelAdapter(
         itemView.setOnLongClickListener {
             channelConfig.onLongClickTelemetry?.invoke(tile)
             val dialog = Dialog(context, R.style.DialogStyle)
-            dialog.setContentView(R.layout.dialog_channel_tiles)
+            val dialogBinding = DialogChannelTilesBinding.inflate(LayoutInflater.from(context))
+            dialog.setContentView(dialogBinding.root)
             dialog.window?.setDimAmount(0.85f)
 
-            dialog.titleText.text = tile.generateRemoveTileTitleStr(context)
-            dialog.removeTileButton.setOnClickListener {
+            dialogBinding.titleText.text = tile.generateRemoveTileTitleStr(context)
+            dialogBinding.removeTileButton.setOnClickListener {
                 _removeEvents.onNext(tile)
                 dialog.dismiss()
             }
 
-            dialog.cancelButton.setOnClickListener {
+            dialogBinding.cancelButton.setOnClickListener {
                 dialog.dismiss()
             }
 
@@ -125,7 +124,7 @@ class DefaultChannelAdapter(
     }
 }
 
-class DefaultChannelTileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val titleView: TextView = itemView.findViewById(R.id.tile_title)
-    val imageView: ImageView = itemView.findViewById(R.id.tile_icon)
+class DefaultChannelTileViewHolder(val binding: HomeTileBinding) : RecyclerView.ViewHolder(binding.root) {
+    val titleView: TextView = binding.tileTitle
+    val imageView: ImageView = binding.tileIcon
 }

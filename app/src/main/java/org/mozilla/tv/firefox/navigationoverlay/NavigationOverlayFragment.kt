@@ -30,10 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
-import kotlinx.android.synthetic.main.hint_bar.*
-import kotlinx.coroutines.Job
+import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
@@ -90,6 +87,9 @@ class NavigationOverlayFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "overlay"
     }
+
+    private var _binding: FragmentNavigationOverlayOrigBinding? = null
+    private val binding get() = _binding!!
 
     /**
      * Used to cancel background->UI threads: we attach them as children to this job
@@ -160,7 +160,8 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_navigation_overlay_orig, container, false)
+        _binding = FragmentNavigationOverlayOrigBinding.inflate(inflater, container, false)
+        val view = binding.root
         toolbarUiController = ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
@@ -170,10 +171,7 @@ class NavigationOverlayFragment : Fragment() {
             onCreateView(view)
         }
 
-        val bannerLayout: View = view.findViewById(R.id.bannerLayout)
-
-        val bannerMoreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
-        bannerMoreInfoButton.setOnClickListener {
+        binding.bannerLayout.bannerMoreInfoButton.setOnClickListener {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
@@ -204,19 +202,19 @@ class NavigationOverlayFragment : Fragment() {
 
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
-        exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
-        fxaButton.contentDescription = getString(R.string.fxa_navigation_item_new, getString(R.string.app_name))
+        binding.topNavContainer.exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
+        binding.topNavContainer.fxaButton.contentDescription = getString(R.string.fxa_navigation_item_new, getString(R.string.app_name))
 
-        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
-        navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
-        registerForContextMenu(channelsContainer)
+        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(requireContext(), R.color.photonGrey10_a60p)) }
+        binding.navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
+        registerForContextMenu(binding.channelsContainer)
         canShowUnpinToast = true
 
-        channelReferenceContainer = ChannelReferenceContainer(channelsContainer, createChannelFactory()).also {
-            channelsContainer.addView(it.pinnedTileChannel.channelContainer)
-            channelsContainer.addView(it.newsChannel.channelContainer)
-            channelsContainer.addView(it.sportsChannel.channelContainer)
-            channelsContainer.addView(it.musicChannel.channelContainer)
+        channelReferenceContainer = ChannelReferenceContainer(binding.channelsContainer, createChannelFactory()).also {
+            binding.channelsContainer.addView(it.pinnedTileChannel.channelContainer)
+            binding.channelsContainer.addView(it.newsChannel.channelContainer)
+            binding.channelsContainer.addView(it.sportsChannel.channelContainer)
+            binding.channelsContainer.addView(it.musicChannel.channelContainer)
         }
     }
 
@@ -234,14 +232,14 @@ class NavigationOverlayFragment : Fragment() {
             .forEach { compositeDisposable.add(it) }
         observeTvGuideTiles()
             .forEach { compositeDisposable.add(it) }
-        HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
+        HintBinder.bindHintsToView(hintViewModel, binding.hintBar.root, animate = false)
                 .forEach { compositeDisposable.add(it) }
         observeToolbarFocusability()
                 .addTo(compositeDisposable)
-        toolbarUiController.observeToolbarState(rootView!!, fragmentManager!!)
+        toolbarUiController.observeToolbarState(binding.root, childFragmentManager)
             .forEach { compositeDisposable.add(it) }
 
-        fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
+        binding.topNavContainer.fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
 
     override fun onStop() {
@@ -270,8 +268,8 @@ class NavigationOverlayFragment : Fragment() {
     // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
     private fun observeAccountState(): Disposable {
         fun setUiToNotAuthenticated() {
-            fxaButton.setImageResource(R.drawable.ic_fxa_login)
-            fxaButton.contentDescription =
+            binding.topNavContainer.fxaButton.setImageResource(R.drawable.ic_fxa_login)
+            binding.topNavContainer.fxaButton.contentDescription =
                 resources.getString(R.string.fxa_navigation_item_new,
                     resources.getString(R.string.app_name))
         }
@@ -284,13 +282,13 @@ class NavigationOverlayFragment : Fragment() {
                 when (accountState) {
                     is AccountState.AuthenticatedWithProfile -> {
                         accountState.profile.avatarSetStrategy
-                            .setTransformation(RoundCornerTransformation(fxaButton.width.toFloat()))
-                            .invoke(fxaButton)
-                        fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                            .setTransformation(RoundCornerTransformation(binding.topNavContainer.fxaButton.width.toFloat()))
+                            .invoke(binding.topNavContainer.fxaButton)
+                        binding.topNavContainer.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                     }
                     AccountState.AuthenticatedNoProfile -> {
-                        fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
-                        fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                        binding.topNavContainer.fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
+                        binding.topNavContainer.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
 
                         val settings = Settings.getInstance(context!!)
                         if (settings.shouldShowFxaOnboarding()) {
@@ -352,11 +350,11 @@ class NavigationOverlayFragment : Fragment() {
         return navigationOverlayViewModel.leftmostActiveToolBarId
                 .subscribe { leftmostToolbarId ->
                     // Reset previous left most active toolbar button's nextFocusLeftID
-                    rootView?.findViewById<View>(navUrlInput.nextFocusUpId)?.nextFocusLeftId = -1
+                    rootView?.findViewById<View>(binding.navUrlInput.nextFocusUpId)?.nextFocusLeftId = -1
                     // Disable left direction click on leftmostToolbarId
                     rootView?.findViewById<View>(leftmostToolbarId)?.nextFocusLeftId = leftmostToolbarId
 
-                    navUrlInput.nextFocusUpId = leftmostToolbarId
+                    binding.navUrlInput.nextFocusUpId = leftmostToolbarId
                 }
     }
 
@@ -439,7 +437,7 @@ class NavigationOverlayFragment : Fragment() {
     )
 
     private fun initSettingsChannel() {
-        settingsTileContainer.gridView.adapter = SettingsChannelAdapter(
+        binding.settingsTileContainer.adapter = SettingsChannelAdapter(
                 loadUrl = { urlStr ->
                     onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
                 },
@@ -465,6 +463,7 @@ class NavigationOverlayFragment : Fragment() {
         super.onDestroyView()
 
         rootView = null
+        _binding = null
 
         // Since we start the async jobs in View.init and Android is inflating the view for us,
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions

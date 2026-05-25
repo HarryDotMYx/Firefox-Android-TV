@@ -12,9 +12,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.android.synthetic.main.tabs_onboarding.descriptionText
-import kotlinx.android.synthetic.main.tabs_onboarding.tabs_onboarding_button
-import kotlinx.coroutines.Deferred
+import org.mozilla.tv.firefox.databinding.TabsOnboardingBinding
+import io.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
 import mozilla.components.concept.sync.AuthType
@@ -119,15 +118,15 @@ class FxaRepo(
 
     fun showFxaOnboardingScreen(context: Context) {
         val dialog = Dialog(context, R.style.OverlayDialogStyle)
-        dialog.setContentView(R.layout.tabs_onboarding)
+        val binding = TabsOnboardingBinding.inflate(dialog.layoutInflater)
+        dialog.setContentView(binding.root)
 
         val resources = context.resources
-        dialog.descriptionText.text =
+        binding.descriptionText.text =
             resources.getString(R.string.fxa_onboarding_instruction,
                 resources.getString(R.string.app_name))
 
-        dialog.tabs_onboarding_button.setOnClickListener {
-
+        binding.tabsOnboardingButton.setOnClickListener {
             dialog.dismiss()
         }
 

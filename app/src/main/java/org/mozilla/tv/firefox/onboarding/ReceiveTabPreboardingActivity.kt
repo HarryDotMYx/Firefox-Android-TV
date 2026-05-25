@@ -4,12 +4,10 @@
 
 package org.mozilla.tv.firefox.onboarding
 
+import org.mozilla.tv.firefox.databinding.ReceiveTabPreboardingBinding
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.receive_tab_preboarding.buttonNotNow
-import kotlinx.android.synthetic.main.receive_tab_preboarding.buttonSignIn
-import kotlinx.android.synthetic.main.receive_tab_preboarding.descriptionText
 import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -21,17 +19,20 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
  */
 class ReceiveTabPreboardingActivity : AppCompatActivity() {
 
+    private lateinit var binding: ReceiveTabPreboardingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.receive_tab_preboarding)
+        binding = ReceiveTabPreboardingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        descriptionText.text = resources.getString(
+        binding.descriptionText.text = resources.getString(
             R.string.fxa_preboarding_instruction1,
             resources.getString(R.string.firefox_tv_brand_name_short),
             resources.getString(R.string.firefox_tv_brand_name)
         )
 
-        buttonSignIn.setOnClickListener {
+        binding.buttonSignIn.setOnClickListener {
             TelemetryIntegration.INSTANCE.fxaPreboardingSignInButtonClickEvent()
             @Suppress("DEPRECATION") // Couldn't work out a better way to do this. If you
             // think of one, please replace this
@@ -40,7 +41,7 @@ class ReceiveTabPreboardingActivity : AppCompatActivity() {
             finish()
         }
 
-        buttonNotNow.setOnClickListener {
+        binding.buttonNotNow.setOnClickListener {
             finish()
             TelemetryIntegration.INSTANCE.fxaPreboardingDismissButtonClickEvent()
         }

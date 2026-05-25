@@ -19,8 +19,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.sentry.Sentry
-import kotlinx.android.synthetic.main.activity_main.container_navigation_overlay
-import kotlinx.android.synthetic.main.overlay_debug.debugLog
+import org.mozilla.tv.firefox.databinding.ActivityMainBinding
+import org.mozilla.tv.firefox.databinding.OverlayDebugBinding
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
@@ -53,6 +53,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private val LOG_TAG = "MainActivity"
     private val startStopCompositeDisposable = CompositeDisposable()
 
+    private lateinit var binding: ActivityMainBinding
+
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
@@ -77,7 +79,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val intentData = IntentValidator.validateOnCreate(this, safeIntent, savedInstanceState)
 
@@ -105,8 +108,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // TODO: refactor out the debug variant visibility check in #1953
         BuildConstants.debugLogStr?.apply {
             val engineViewVersion = (this@MainActivity as Context).application.getEngineViewVersion()
-            debugLog.visibility = View.VISIBLE
-            debugLog.text = "$this $engineViewVersion"
+            binding.debugLog.visibility = View.VISIBLE
+            binding.debugLog.text = "$this $engineViewVersion"
         }
     }
 
@@ -264,7 +267,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
-        ViewUtils.hideKeyboard(container_navigation_overlay)
+        ViewUtils.hideKeyboard(binding.containerNavigationOverlay)
         serviceLocator.screenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, false,
                 null, null)
     }
@@ -274,7 +277,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
         inputLocation: UrlTextInputLocation?
     ) {
-        ViewUtils.hideKeyboard(container_navigation_overlay)
+        ViewUtils.hideKeyboard(binding.containerNavigationOverlay)
         // It'd be much cleaner/safer to do this with a kotlin callback.
         serviceLocator.screenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, true,
                 autocompleteResult, inputLocation)

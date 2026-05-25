@@ -3,8 +3,10 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
-    <string name="app_name" translatable="false">Firefox</string>
-    <string name="app_name_extended_fire" translatable="false">Firefox for Fire TV</string>
+    <string name="app_name" translatable="false">Firefox Android TV</string>
+    <string name="app_name_extended_fire" translatable="false">Firefox Android TV</string>
+    <string name="about_rebuild_by" translatable="false"><![CDATA[re-Build by PGMAFX <a href="https://github.com/harrydotmyx/Firefox-Android-TV">https://github.com/harrydotmyx/Firefox-Android-TV</a>]]></string>
+    <string name="about_android_requirement" translatable="false">Only Android TV OS 14 and above is supported.</string>
 
     <!-- This String is used in the User Agent -->
     <string name="useragent_appname" translatable="false">Focus</string>

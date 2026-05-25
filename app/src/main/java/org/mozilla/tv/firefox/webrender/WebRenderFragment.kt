@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.webrender
 
+import org.mozilla.tv.firefox.databinding.FragmentBrowserBinding
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.PointF
@@ -19,9 +20,6 @@ import androidx.core.view.isGone
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_browser.*
-import kotlinx.android.synthetic.main.fragment_browser.view.*
-import kotlinx.android.synthetic.main.hint_bar.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
@@ -69,6 +67,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             arguments = Bundle().apply { putString(ARGUMENT_SESSION_UUID, session.id) }
         }
     }
+
+    private var _binding: FragmentBrowserBinding? = null
+    private val binding get() = _binding!!
 
     lateinit var session: Session
 
@@ -149,29 +150,26 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val context = inflater.context
-        val layout = inflater.inflate(R.layout.fragment_browser, container, false)
+        _binding = FragmentBrowserBinding.inflate(inflater, container, false)
+        val layout = binding.root
 
-        layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
+        binding.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             context.serviceLocator.cursorModel.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
-        context.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = layout.engineView::couldScrollInDirection
+        context.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = binding.engineView::couldScrollInDirection
 
         // Setup the banner
-
-        val bannerLayout: View = layout.findViewById(R.id.bannerLayout)
-
-        val moreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
-        moreInfoButton.setOnClickListener {
+        binding.bannerLayout.bannerMoreInfoButton.setOnClickListener {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
 
-        layout.progressBar.initialize(this)
+        binding.progressBar.initialize(this)
 
         // We break encapsulation here: we should use the super.engineView reference but it's not init until
         // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class
         // is confusing so I'd rather break encapsulation than confuse devs.
-        mediaSessionHolder?.videoVoiceCommandMediaSession?.onCreateEngineView(layout.engineView, session)
+        mediaSessionHolder?.videoVoiceCommandMediaSession?.onCreateEngineView(binding.engineView, session)
 
         return layout
     }
@@ -230,7 +228,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 .subscribe { engineView!!.scrollByClamped(it.x.toInt(), it.y.toInt()) }
                 .addTo(startStopCompositeDisposable)
 
-        cursorView.setup(context!!.serviceLocator.cursorModel)
+        binding.cursorView.setup(context!!.serviceLocator.cursorModel)
                 .addTo(startStopCompositeDisposable)
 
         val (hintViewModel, progressBarBottomMargin) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
@@ -240,9 +238,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             InactiveHintViewModel() to 0
         }
 
-        (progressBar.layoutParams as? FrameLayout.LayoutParams)?.bottomMargin = progressBarBottomMargin
+        (binding.progressBar.layoutParams as? FrameLayout.LayoutParams)?.bottomMargin = progressBarBottomMargin
 
-        HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
+        HintBinder.bindHintsToView(hintViewModel, binding.hintBar.root, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
     }
 
@@ -259,6 +257,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         context!!.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = null
 
         rootView = null
+        _binding = null
 
         super.onDestroyView()
     }

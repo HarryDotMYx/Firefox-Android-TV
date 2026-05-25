@@ -13,15 +13,8 @@ import android.widget.PopupWindow
 import androidx.core.view.forEach
 import androidx.fragment.app.FragmentManager
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.navUrlInput
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.topNavContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.desktopModeButton
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.navButtonBack
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.navButtonForward
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.navButtonReload
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.pinButton
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.turboButton
-import kotlinx.android.synthetic.main.tooltip.view.tooltip
+import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
+import org.mozilla.tv.firefox.databinding.TooltipBinding
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
@@ -49,51 +42,53 @@ class ToolbarUiController(
     private var hasUserChangedURLSinceEditTextFocused = false
 
     private lateinit var tooltip: PopupWindow
-    private lateinit var tooltipView: View
+    private lateinit var tooltipBinding: TooltipBinding
+    private lateinit var binding: FragmentNavigationOverlayOrigBinding
 
     fun onCreateView(layout: View) {
+        binding = FragmentNavigationOverlayOrigBinding.bind(layout)
         val toolbarClickListener = ToolbarOnClickListener()
-        layout.topNavContainer.forEach {
-            it.nextFocusDownId = layout.navUrlInput.id
+        binding.topNavContainer.root.forEach {
+            it.nextFocusDownId = binding.navUrlInput.id
             if (it.isFocusable) it.setOnClickListener(toolbarClickListener)
 
-            it.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) showTooltip(it)
-                else tooltip.dismiss() // Hide the tooltip when the button is not focused
+            it.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) showTooltip(view)
+                else if (::tooltip.isInitialized) tooltip.dismiss() // Hide the tooltip when the button is not focused
             }
         }
 
         val layoutInflater = LayoutInflater.from(layout.context)
-        tooltipView = layoutInflater.inflate(R.layout.tooltip, null)
-        tooltip = PopupWindow(tooltipView, WRAP_CONTENT, WRAP_CONTENT, false)
+        tooltipBinding = TooltipBinding.inflate(layoutInflater)
+        tooltip = PopupWindow(tooltipBinding.root, WRAP_CONTENT, WRAP_CONTENT, false)
 
-        setupUrlInput(layout)
+        setupUrlInput()
     }
 
     private fun showTooltip(navBarButton: View) {
-        tooltip.contentView.tooltip.text = navBarButton.contentDescription
+        tooltipBinding.tooltip.text = navBarButton.contentDescription
         tooltip.isClippingEnabled = false
 
         // The measurement of the popup happens in onGlobalLayout. We need to update the position of the
         // popup after this measurement has happened. Beforehand, the measuredWidth will be 0.
-        tooltipView.viewTreeObserver.addOnGlobalLayoutListener(
+        tooltipBinding.root.viewTreeObserver.addOnGlobalLayoutListener(
             object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     tooltip.update(
                         navBarButton,
-                        0 - (tooltip.contentView.measuredWidth - navBarButton.width) / 2,
+                        0 - (tooltipBinding.root.measuredWidth - navBarButton.width) / 2,
                         10,
                         -1,
                         -1
                     )
-                    tooltipView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    tooltipBinding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
             }
         )
         tooltip.showAsDropDown(navBarButton)
     }
 
-    private fun setupUrlInput(layout: View) = with(layout.navUrlInput) {
+    private fun setupUrlInput() = with(binding.navUrlInput) {
         setOnCommitListener {
             val userInput = text.toString()
             if (userInput == URLs.APP_URL_HOME) {
@@ -140,25 +135,25 @@ class ToolbarUiController(
         val serviceLocator = context.serviceLocator
         val turboButtonContent = experimentsProvider.getTurboModeToolbar()
 
-        layout.turboButton.setImageResource(turboButtonContent.imageId)
+        binding.topNavContainer.turboButton.setImageResource(turboButtonContent.imageId)
 
         val stateDisposable = toolbarViewModel.state.subscribe {
             if (it == null) return@subscribe
-            updateOverlayButtonState(it.backEnabled, layout.navButtonBack)
-            updateOverlayButtonState(it.forwardEnabled, layout.navButtonForward)
-            updateOverlayButtonState(it.pinEnabled, layout.pinButton)
-            updateOverlayButtonState(it.refreshEnabled, layout.navButtonReload)
-            updateOverlayButtonState(it.desktopModeEnabled, layout.desktopModeButton)
+            updateOverlayButtonState(it.backEnabled, binding.topNavContainer.navButtonBack)
+            updateOverlayButtonState(it.forwardEnabled, binding.topNavContainer.navButtonForward)
+            updateOverlayButtonState(it.pinEnabled, binding.topNavContainer.pinButton)
+            updateOverlayButtonState(it.refreshEnabled, binding.topNavContainer.navButtonReload)
+            updateOverlayButtonState(it.desktopModeEnabled, binding.topNavContainer.desktopModeButton)
 
-            layout.pinButton.isChecked = it.pinChecked
-            layout.pinButton.contentDescription =
+            binding.topNavContainer.pinButton.isChecked = it.pinChecked
+            binding.topNavContainer.pinButton.contentDescription =
                 if (it.pinChecked)
                     context.resources.getString(R.string.unpin_label)
                 else
                     context.resources.getString(R.string.pin_label)
 
-            layout.desktopModeButton.isChecked = it.desktopModeChecked
-            layout.turboButton.isChecked = it.turboChecked
+            binding.topNavContainer.desktopModeButton.isChecked = it.desktopModeChecked
+            binding.topNavContainer.turboButton.isChecked = it.turboChecked
 
             val resources = layout.context.resources
             val turboText = if (it.turboChecked) {
@@ -167,8 +162,10 @@ class ToolbarUiController(
                 resources.getString(turboButtonContent.disabledTextId)
             }
 
-            layout.turboButton.contentDescription = turboText
-            if (layout.turboButton.hasFocus()) tooltipView.tooltip.text = turboText
+            binding.topNavContainer.turboButton.contentDescription = turboText
+            if (binding.topNavContainer.turboButton.hasFocus()) {
+                tooltipBinding.tooltip.text = turboText
+            }
 
             if (!hasUserChangedURLSinceEditTextFocused) {
                 // The url can get updated in the background, e.g. if a loading page is redirected. We
@@ -183,7 +180,7 @@ class ToolbarUiController(
                 // we can't determine if the keyboard is up or not and focus isn't a good indicator because
                 // we can focus the EditText without opening the soft keyboard and the user won't even know
                 // these are inaccurate!
-                layout.navUrlInput.setText(it.urlBarText)
+                binding.navUrlInput.setText(it.urlBarText)
             }
         }
 

@@ -12,25 +12,25 @@ import android.os.Build
 class DeviceInfo {
 
     /**
-     * Translate Fire TV model codes into device names
+     * Translate Android TV model codes into device names
      */
     fun getDeviceModel(): String {
         // Amazon does not localize their device names, so we do not need to
         val deviceCodeMap = mapOf(
-            "AFTA" to "Fire TV Cube",
-            "AFTN" to "Fire TV 4K",
-            "AFTS" to "Fire TV",
-            "AFTB" to "Fire TV",
-            "AFTMM" to "Fire TV Stick 4K",
-            "AFTT" to "Fire TV Stick",
-            "AFTM" to "Fire TV Stick",
-            "AFTRS" to "Fire TV Edition - Element 4K",
-            "AFTKMST12" to "Fire TV Edition - Toshiba 4K",
-            "AFTBAMR311" to "Fire TV Edition - Toshiba HD",
-            "AFTJMST12" to "Fire TV Edition - Insignia 4K",
-            "AFTEAMR311" to "Fire TV Edition - Insignia HD"
+            "AFTA" to "Android TV Cube",
+            "AFTN" to "Android TV 4K",
+            "AFTS" to "Android TV",
+            "AFTB" to "Android TV",
+            "AFTMM" to "Android TV Stick 4K",
+            "AFTT" to "Android TV Stick",
+            "AFTM" to "Android TV Stick",
+            "AFTRS" to "Android TV Edition - Element 4K",
+            "AFTKMST12" to "Android TV Edition - Toshiba 4K",
+            "AFTBAMR311" to "Android TV Edition - Toshiba HD",
+            "AFTJMST12" to "Android TV Edition - Insignia 4K",
+            "AFTEAMR311" to "Android TV Edition - Insignia HD"
         )
 
-        return deviceCodeMap.getOrElse(Build.MODEL) { "Fire TV" }
+        return deviceCodeMap.getOrElse(Build.MODEL) { "Android TV" }
     }
 }

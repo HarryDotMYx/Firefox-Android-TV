@@ -4,14 +4,13 @@
 
 package org.mozilla.tv.firefox.webrender
 
+import org.mozilla.tv.firefox.databinding.FirefoxProgressBarBinding
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import kotlinx.android.synthetic.main.firefox_progress_bar.view.progressAnimation
-import kotlinx.android.synthetic.main.firefox_progress_bar.view.url
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.R
 
@@ -22,6 +21,8 @@ class FirefoxProgressBar @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : LinearLayout(context, attrs, defStyle), Session.Observer {
+
+    private val binding: FirefoxProgressBarBinding = FirefoxProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun initialize(webRenderFrag: WebRenderFragment) {
         webRenderFrag.session.register(this, webRenderFrag)
@@ -36,18 +37,16 @@ class FirefoxProgressBar @JvmOverloads constructor(
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        this.url.text = url
+        binding.url.text = url
     }
 
     init {
-        LayoutInflater.from(context)
-                .inflate(R.layout.firefox_progress_bar, this, true)
         setLayerType(View.LAYER_TYPE_HARDWARE, null)
     }
 
     private fun showBar() {
         visibility = View.VISIBLE
-        (progressAnimation.background as AnimationDrawable).start()
+        (binding.progressAnimation.background as AnimationDrawable).start()
         animate().cancel()
         alpha = 1f
     }
@@ -56,7 +55,7 @@ class FirefoxProgressBar @JvmOverloads constructor(
         this.animate()
                 .withEndAction {
                     this.visibility = View.GONE
-                    (this.progressAnimation.background as AnimationDrawable).stop()
+                    (this.binding.progressAnimation.background as AnimationDrawable).stop()
                 }
                 .setDuration(HIDE_ANIMATION_DURATION_MILLIS)
                 .alpha(0f)

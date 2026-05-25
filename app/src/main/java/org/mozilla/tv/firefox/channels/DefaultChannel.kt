@@ -4,12 +4,11 @@
 
 package org.mozilla.tv.firefox.channels
 
+import org.mozilla.tv.firefox.databinding.DefaultChannelBinding
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.default_channel.view.channelSubtitle
-import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 /**
  * A data container representing a standard channel on the homescreen. This class references a Context and must
@@ -20,28 +19,27 @@ class DefaultChannel(
     private val adapter: DefaultChannelAdapter
 ) {
 
+    private val binding = DefaultChannelBinding.bind(channelContainer)
+
     val focusChangeObservable get() = adapter.focusChangeObservable
 
     val removeTileEvents: Observable<ChannelTile> = adapter.removeEvents
 
     fun setTitle(title: CharSequence) {
-        titleView.text = title
+        binding.channelTitle.text = title
     }
 
     fun setSubtitle(subtitle: CharSequence?) {
-        subtitleView.visibility = if (subtitle.isNullOrEmpty()) {
+        binding.channelSubtitle.visibility = if (subtitle.isNullOrEmpty()) {
             View.GONE
         } else {
             View.VISIBLE
         }
 
-        subtitleView.text = subtitle
+        binding.channelSubtitle.text = subtitle
     }
 
     fun setContents(tileData: List<ChannelTile>) {
         adapter.submitList(tileData)
     }
-
-    private val titleView: TextView = channelContainer.channelTitle
-    private val subtitleView: TextView = channelContainer.channelSubtitle
 }

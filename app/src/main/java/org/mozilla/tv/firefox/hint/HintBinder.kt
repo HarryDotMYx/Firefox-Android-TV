@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.hint
 
+import org.mozilla.tv.firefox.databinding.HintBarBinding
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.text.Spannable
@@ -13,7 +14,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
 import mozilla.components.support.ktx.android.util.dpToPx
 
 private const val IMAGE = "\$IMAGE"
@@ -25,6 +25,7 @@ private const val IMAGE_SIZE_DP = 24
 object HintBinder {
 
     fun bindHintsToView(vm: HintViewModel, hintContainer: View, animate: Boolean): List<Disposable> {
+        val binding = HintBarBinding.bind(hintContainer)
         val displayedDisposable = if (!animate) {
             vm.isDisplayed
                     .doOnDispose { hintContainer.isVisible = false }
@@ -83,8 +84,8 @@ object HintBinder {
                 spannableBuilder
             }
 
-            hintContainer.hintBarText.text = styledText
-            hintContainer.hintBarText.contentDescription = hint.contentDescription
+            binding.hintBarText.text = styledText
+            binding.hintBarText.contentDescription = hint.contentDescription
         }
 
         return listOf(displayedDisposable, hintDisposable)

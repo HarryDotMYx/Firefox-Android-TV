@@ -39,6 +39,8 @@ object LocalizedContent {
         }
 
         substitutionMap["%about-version%"] = aboutVersion
+        substitutionMap["%about-rebuild-by%"] = resources.getString(R.string.about_rebuild_by)
+        substitutionMap["%about-android-requirement%"] = resources.getString(R.string.about_android_requirement)
 
         val appName = context.resources.getString(R.string.app_name)
         val mplUrl = "https://www.mozilla.org/en-US/MPL/"

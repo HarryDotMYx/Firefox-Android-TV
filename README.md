@@ -1,13 +1,13 @@
-> ⚠️ Firefox has ended support for Amazon Fire TV. This app may continue to work, but it won’t receive security or other updates effective April 30, 2021. See also [https://support.mozilla.org/en-US/kb/end-support-firefox-amazon-devices](https://support.mozilla.org/en-US/kb/end-support-firefox-amazon-devices).
+> ⚠️ Firefox for Android TV has been updated by **PGMAFX**. This app is now optimized for use on all Android TV devices.
 
-# Firefox for Amazon's Fire TV
+# Firefox for Android TV
 
 [![Task Status](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/badge.svg)](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/latest)
 [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-tv/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-tv)
 
 _Fast for good, just right for watching video at home. A browser for
 discovering and watching web video on the big screen TV for users to install on
-their Amazon Fire TV and Fire TV stick._
+their Android TV devices._
 
 [Get it on Amazon Fire TV][amazon link]
 
@@ -35,13 +35,13 @@ Dependencies:
   git clone https://github.com/mozilla-mobile/firefox-tv
   ```
 
-2. Import the project into Android Studio or build on the command line:
+1. Import the project into Android Studio or build on the command line:
 
   ```shell
   ./gradlew clean app:assembleSystemDebug
   ```
 
-3. Make sure to select the right build variant in Android Studio: **systemDebug**
+1. Make sure to select the right build variant in Android Studio: **systemDebug**
 
 ### Running
 It is recommended to test directly on a Fire TV: see the [developer guide][dev guide] for more info.
@@ -79,7 +79,7 @@ To run all UI tests, follow these steps
   - Either use `adb connect` for a real device, or start an emulator instance using AVD
   - Prefer a real device (emulators will fail some tests)
   - The next step will fail if you are connected to more than one device
-2. Run `./gradlew connectedSystemDebugAndroidTest` from the command line
+1. Run `./gradlew connectedSystemDebugAndroidTest` from the command line
   - Aliasing this command is recommended
 
 ### Pre-push hooks

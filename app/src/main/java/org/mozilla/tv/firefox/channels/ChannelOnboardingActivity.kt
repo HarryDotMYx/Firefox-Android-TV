@@ -4,19 +4,22 @@
 
 package org.mozilla.tv.firefox.channels
 
+import org.mozilla.tv.firefox.databinding.ChannelOnboardingBinding
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.channel_onboarding.tv_onboarding_button
 import org.mozilla.tv.firefox.R
 
 class ChannelOnboardingActivity : AppCompatActivity() {
 
+    private lateinit var binding: ChannelOnboardingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.channel_onboarding)
+        binding = ChannelOnboardingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        tv_onboarding_button.setOnClickListener { _ ->
+        binding.tvOnboardingButton.setOnClickListener { _ ->
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
                     .edit()
                     .putBoolean(TV_ONBOARDING_SHOWN_PREF, true)

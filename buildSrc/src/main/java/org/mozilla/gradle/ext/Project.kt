@@ -4,10 +4,9 @@
 
 package org.mozilla.gradle.ext
 
-import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.BaseExtension
 import org.gradle.api.Project
 
-fun Project.androidDSLOrThrow(): AppPlugin {
-    return plugins.findPlugin("android") as? AppPlugin
-            ?: throw IllegalStateException("Android plugin must be applied")
+fun Project.androidExtension(): BaseExtension {
+    return extensions.getByType(BaseExtension::class.java)
 }

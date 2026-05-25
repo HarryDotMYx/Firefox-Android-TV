@@ -4,11 +4,13 @@
 
 package org.mozilla.tv.firefox.channels
 
+import org.mozilla.tv.firefox.databinding.SettingsTileBinding
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.settings_tile.view.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
@@ -40,19 +42,20 @@ class SettingsChannelAdapter(
             R.id.settings_tile_privacypolicy)
     )
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SettingsTileHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.settings_tile, parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsTileHolder {
+        val binding = SettingsTileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SettingsTileHolder(binding)
+    }
 
     override fun getItemCount(): Int {
         return settingsItems.size
     }
 
-    override fun onBindViewHolder(holder: SettingsTileHolder, position: Int) = with(holder) {
+    override fun onBindViewHolder(holder: SettingsTileHolder, position: Int) {
         val itemData = settingsItems[position]
-        iconView.setImageResource(itemData.imgRes)
-        titleView.setText(itemData.titleRes)
-        itemView.settings_cardview.setOnClickListener {
+        holder.iconView.setImageResource(itemData.imgRes)
+        holder.titleView.setText(itemData.titleRes)
+        holder.binding.settingsCardview.setOnClickListener {
             when (val type = itemData.type) {
                 SettingsScreen.DATA_COLLECTION -> showSettings(type as SettingsScreen)
                 SettingsScreen.CLEAR_COOKIES -> showSettings(type as SettingsScreen)
@@ -61,14 +64,14 @@ class SettingsChannelAdapter(
             }
             TelemetryIntegration.INSTANCE.settingsTileClickEvent(itemData.type)
         }
-        itemView.contentDescription = itemView.context.getString(itemData.titleRes)
-        itemView.id = itemData.viewId // Add ids for testing
+        holder.itemView.contentDescription = holder.itemView.context.getString(itemData.titleRes)
+        holder.itemView.id = itemData.viewId // Add ids for testing
     }
 }
 
-class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val iconView = itemView.settings_icon
-    val titleView = itemView.settings_title
+class SettingsTileHolder(val binding: SettingsTileBinding) : RecyclerView.ViewHolder(binding.root) {
+    val iconView: ImageView = binding.settingsIcon
+    val titleView: TextView = binding.settingsTitle
 }
 
 // We differentiate between Settings tiles that lead to other Settings screens, or are just buttons

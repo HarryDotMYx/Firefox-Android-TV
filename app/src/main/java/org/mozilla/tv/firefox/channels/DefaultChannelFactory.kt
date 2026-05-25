@@ -4,9 +4,9 @@
 
 package org.mozilla.tv.firefox.channels
 
+import org.mozilla.tv.firefox.databinding.DefaultChannelBinding
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.KillswitchLayout
 
@@ -24,8 +24,9 @@ class DefaultChannelFactory(
         val context = parent.context
         val channelAdapter = DefaultChannelAdapter(context, loadUrl, onTileFocused, channelConfig)
 
-        val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as KillswitchLayout
-        containerView.channelTileContainer.apply {
+        val binding = DefaultChannelBinding.inflate(LayoutInflater.from(context), parent, false)
+        val containerView = binding.root as KillswitchLayout
+        binding.channelTileContainer.apply {
             val channelLayoutManager = ChannelLayoutManager(context)
             layoutManager = channelLayoutManager
 
@@ -44,7 +45,7 @@ class DefaultChannelFactory(
             isAllowedByCurrentExperiment = channelConfig.isEnabledInCurrentExperiment,
             allowedInLocales = channelConfig.enabledInLocales
         )
-        if (id != null) containerView.channelTileContainer.id = id
+        if (id != null) binding.channelTileContainer.id = id
 
         return DefaultChannel(
                 channelContainer = containerView,

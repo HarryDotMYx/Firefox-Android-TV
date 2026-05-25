@@ -7,7 +7,7 @@ package org.mozilla.gradle.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.mozilla.gradle.GitAggregates
-import org.mozilla.gradle.ext.androidDSLOrThrow
+import org.mozilla.gradle.ext.androidExtension
 import org.mozilla.gradle.ext.getAssembleReleaseTasks
 import org.mozilla.gradle.ext.getCompileReleaseTasks
 
@@ -67,7 +67,7 @@ open class ValidateAndroidAppReleaseConfiguration : DefaultTask() {
             return gitTag.drop(1) // remove "v"
         }
 
-        val buildVersionName = project.androidDSLOrThrow().extension.defaultConfig.versionName
+        val buildVersionName = project.androidExtension().defaultConfig.versionName ?: ""
         val gitTagVersionName = getGitTagVersionName()
         if (buildVersionName != gitTagVersionName) {
             throw IllegalStateException("Expected build.gradle versionName, $buildVersionName, " +
