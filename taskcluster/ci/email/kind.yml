@@ -19,7 +19,7 @@ jobs:
       sign: 'Sign for Github'
       push: 'Push to Amazon'
     worker:
-      to-address: firefox-tv@mozilla.com
+      to-address: hello@azhan.my
       content:
         by-release-type:
           production: |

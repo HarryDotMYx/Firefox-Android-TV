@@ -12,7 +12,7 @@ from taskgraph.util.schema import resolve_keyed_by
 transforms = TransformSequence()
 
 
-NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
+NOTIFY_EMAIL_ADDRESS = 'hello@azhan.my'
 
 
 @transforms.add
