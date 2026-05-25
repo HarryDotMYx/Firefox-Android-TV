@@ -43,6 +43,14 @@
 -dontwarn kotlinx.atomicfu.*
 
 ####################################################################################################
+# Glean
+####################################################################################################
+
+# Older Glean artifacts include local test server helpers that reference JUnit classes. They are not
+# used by the app at runtime, but R8 still sees the references while shrinking release builds.
+-dontwarn org.junit.**
+
+####################################################################################################
 # Android architecture components
 ####################################################################################################
 

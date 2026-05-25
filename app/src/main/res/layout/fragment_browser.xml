@@ -6,7 +6,8 @@
     android:id="@+id/browserFragmentRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/browserContainer"
@@ -69,7 +70,8 @@
                 android:id="@+id/engineView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbarThumbVertical="@drawable/scrollbar_thumb">
+                android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+                tools:ignore="Instantiatable">
             </mozilla.components.concept.engine.EngineView>
 
             <include layout="@layout/hint_bar"/>
