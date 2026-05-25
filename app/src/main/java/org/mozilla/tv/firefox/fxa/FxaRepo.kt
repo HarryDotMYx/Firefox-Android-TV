@@ -9,11 +9,10 @@ import android.app.Dialog
 import android.content.Context
 import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.databinding.TabsOnboardingBinding
-import io.coroutines.Deferred
+import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
 import mozilla.components.concept.sync.AuthType
@@ -80,7 +79,7 @@ class FxaRepo(
         object Initial : AccountState()
     }
 
-    @VisibleForTesting(otherwise = NONE)
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     val accountObserver = FirefoxAccountObserver()
 
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(AccountState.Initial)
@@ -176,7 +175,7 @@ class FxaRepo(
     /**
      * See [AccountState] kdoc for more explanation on states.
      */
-    @VisibleForTesting(otherwise = NONE)
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     inner class FirefoxAccountObserver : AccountObserver {
         override fun onAuthenticated(account: OAuthAccount, authType: AuthType) {
             _accountState.onNext(AuthenticatedNoProfile)

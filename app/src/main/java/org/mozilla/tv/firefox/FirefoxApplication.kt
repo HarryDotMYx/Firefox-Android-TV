@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox
 import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
-import androidx.annotation.VisibleForTesting.PRIVATE
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import mozilla.appservices.Megazord
@@ -38,7 +37,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
         private set
 
-    @VisibleForTesting(otherwise = PRIVATE) // See the TestFirefoxApplication impl for why this method exists.
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) // See the TestFirefoxApplication impl for why this method exists.
     protected open fun getSystemUserAgent(): String = WebSettings.getDefaultUserAgent(this)
 
     // See the TestFirefoxApplication impl for why this method exists.

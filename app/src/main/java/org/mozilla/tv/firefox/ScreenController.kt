@@ -8,7 +8,6 @@ import android.content.Context
 import android.text.TextUtils
 import android.view.KeyEvent
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.NONE
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import io.reactivex.Observable
@@ -150,7 +149,7 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     fun dispatchKeyEvent(
         keyEvent: KeyEvent,
         fragmentManager: FragmentManager,
-        @VisibleForTesting(otherwise = NONE) currentActiveScreen: ActiveScreen? = _currentActiveScreen.value
+        @VisibleForTesting(otherwise = VisibleForTesting.NONE) currentActiveScreen: ActiveScreen? = _currentActiveScreen.value
     ): Boolean {
         if (keyEvent.keyCode == KeyEvent.KEYCODE_MENU) {
             return when (keyEvent.action) {
