@@ -80,7 +80,7 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
         return compositeDisposable
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         // The amount that this view must be offset for it to appear centered
         // (otherwise the PointF we set would be its top left corner)

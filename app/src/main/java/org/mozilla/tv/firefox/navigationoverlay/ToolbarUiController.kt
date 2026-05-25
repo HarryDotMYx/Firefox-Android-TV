@@ -14,6 +14,7 @@ import androidx.core.view.forEach
 import androidx.fragment.app.FragmentManager
 import io.reactivex.disposables.Disposable
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
+import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayTopNavBinding
 import org.mozilla.tv.firefox.databinding.TooltipBinding
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
@@ -44,11 +45,13 @@ class ToolbarUiController(
     private lateinit var tooltip: PopupWindow
     private lateinit var tooltipBinding: TooltipBinding
     private lateinit var binding: FragmentNavigationOverlayOrigBinding
+    private lateinit var topNavBinding: FragmentNavigationOverlayTopNavBinding
 
     fun onCreateView(layout: View) {
         binding = FragmentNavigationOverlayOrigBinding.bind(layout)
+        topNavBinding = FragmentNavigationOverlayTopNavBinding.bind(binding.topNavContainer)
         val toolbarClickListener = ToolbarOnClickListener()
-        binding.topNavContainer.root.forEach {
+        binding.topNavContainer.forEach {
             it.nextFocusDownId = binding.navUrlInput.id
             if (it.isFocusable) it.setOnClickListener(toolbarClickListener)
 
@@ -135,25 +138,25 @@ class ToolbarUiController(
         val serviceLocator = context.serviceLocator
         val turboButtonContent = experimentsProvider.getTurboModeToolbar()
 
-        binding.topNavContainer.turboButton.setImageResource(turboButtonContent.imageId)
+        topNavBinding.turboButton.setImageResource(turboButtonContent.imageId)
 
         val stateDisposable = toolbarViewModel.state.subscribe {
             if (it == null) return@subscribe
-            updateOverlayButtonState(it.backEnabled, binding.topNavContainer.navButtonBack)
-            updateOverlayButtonState(it.forwardEnabled, binding.topNavContainer.navButtonForward)
-            updateOverlayButtonState(it.pinEnabled, binding.topNavContainer.pinButton)
-            updateOverlayButtonState(it.refreshEnabled, binding.topNavContainer.navButtonReload)
-            updateOverlayButtonState(it.desktopModeEnabled, binding.topNavContainer.desktopModeButton)
+            updateOverlayButtonState(it.backEnabled, topNavBinding.navButtonBack)
+            updateOverlayButtonState(it.forwardEnabled, topNavBinding.navButtonForward)
+            updateOverlayButtonState(it.pinEnabled, topNavBinding.pinButton)
+            updateOverlayButtonState(it.refreshEnabled, topNavBinding.navButtonReload)
+            updateOverlayButtonState(it.desktopModeEnabled, topNavBinding.desktopModeButton)
 
-            binding.topNavContainer.pinButton.isChecked = it.pinChecked
-            binding.topNavContainer.pinButton.contentDescription =
+            topNavBinding.pinButton.isChecked = it.pinChecked
+            topNavBinding.pinButton.contentDescription =
                 if (it.pinChecked)
                     context.resources.getString(R.string.unpin_label)
                 else
                     context.resources.getString(R.string.pin_label)
 
-            binding.topNavContainer.desktopModeButton.isChecked = it.desktopModeChecked
-            binding.topNavContainer.turboButton.isChecked = it.turboChecked
+            topNavBinding.desktopModeButton.isChecked = it.desktopModeChecked
+            topNavBinding.turboButton.isChecked = it.turboChecked
 
             val resources = layout.context.resources
             val turboText = if (it.turboChecked) {
@@ -162,8 +165,8 @@ class ToolbarUiController(
                 resources.getString(turboButtonContent.disabledTextId)
             }
 
-            binding.topNavContainer.turboButton.contentDescription = turboText
-            if (binding.topNavContainer.turboButton.hasFocus()) {
+            topNavBinding.turboButton.contentDescription = turboText
+            if (topNavBinding.turboButton.hasFocus()) {
                 tooltipBinding.tooltip.text = turboText
             }
 

@@ -76,7 +76,7 @@ class SessionRepo(
                 }
             }
 
-            fun <T> BehaviorSubject<T>.onNextIfNew(value: T) {
+            fun <T : Any> BehaviorSubject<T>.onNextIfNew(value: T) {
                 if (this.value != value) this.onNext(value)
             }
 

@@ -305,7 +305,7 @@ public class LocaleManager {
         // In a very small number of cases, this locale will still be null. Most of our
         // userbase uses English as a primary language, so we default to that as a fallback
         if (currentLocale == null) {
-            Sentry.capture(new AssertionError("Selected locale not available. Falling back to EN"));
+            Sentry.captureException(new AssertionError("Selected locale not available. Falling back to EN"));
             currentLocale = Locale.US;
         }
 

@@ -52,7 +52,7 @@ class SettingsFragment : Fragment() {
             SettingsScreen.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
             SettingsScreen.FXA_PROFILE -> setupFxaProfileScreen(inflater, container)
             else -> {
-                Sentry.capture(IllegalStateException("Unexpected Settings type received: $type"))
+                Sentry.captureException(IllegalStateException("Unexpected Settings type received: $type"))
                 return container!!
             }
         }

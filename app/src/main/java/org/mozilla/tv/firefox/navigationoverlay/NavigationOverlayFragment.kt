@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ScrollView
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.NONE
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
@@ -31,6 +30,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
+import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayTopNavBinding
+import org.mozilla.tv.firefox.databinding.HintBarBinding
+import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
@@ -90,6 +92,8 @@ class NavigationOverlayFragment : Fragment() {
 
     private var _binding: FragmentNavigationOverlayOrigBinding? = null
     private val binding get() = _binding!!
+    private lateinit var topNavBinding: FragmentNavigationOverlayTopNavBinding
+    private lateinit var hintBarBinding: HintBarBinding
 
     /**
      * Used to cancel background->UI threads: we attach them as children to this job
@@ -162,6 +166,8 @@ class NavigationOverlayFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentNavigationOverlayOrigBinding.inflate(inflater, container, false)
         val view = binding.root
+        topNavBinding = FragmentNavigationOverlayTopNavBinding.bind(binding.topNavContainer)
+        hintBarBinding = HintBarBinding.bind(binding.root.findViewById(R.id.hintBarContainer))
         toolbarUiController = ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
@@ -171,7 +177,7 @@ class NavigationOverlayFragment : Fragment() {
             onCreateView(view)
         }
 
-        binding.bannerLayout.bannerMoreInfoButton.setOnClickListener {
+        binding.bannerMoreInfoButton.setOnClickListener {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
@@ -202,8 +208,8 @@ class NavigationOverlayFragment : Fragment() {
 
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
-        binding.topNavContainer.exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
-        binding.topNavContainer.fxaButton.contentDescription = getString(R.string.fxa_navigation_item_new, getString(R.string.app_name))
+        topNavBinding.exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
+        topNavBinding.fxaButton.contentDescription = getString(R.string.fxa_navigation_item_new, getString(R.string.app_name))
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(requireContext(), R.color.photonGrey10_a60p)) }
         binding.navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
@@ -232,14 +238,14 @@ class NavigationOverlayFragment : Fragment() {
             .forEach { compositeDisposable.add(it) }
         observeTvGuideTiles()
             .forEach { compositeDisposable.add(it) }
-        HintBinder.bindHintsToView(hintViewModel, binding.hintBar.root, animate = false)
+        HintBinder.bindHintsToView(hintViewModel, hintBarBinding.root, animate = false)
                 .forEach { compositeDisposable.add(it) }
         observeToolbarFocusability()
                 .addTo(compositeDisposable)
         toolbarUiController.observeToolbarState(binding.root, childFragmentManager)
             .forEach { compositeDisposable.add(it) }
 
-        binding.topNavContainer.fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
+        topNavBinding.fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
 
     override fun onStop() {
@@ -249,7 +255,7 @@ class NavigationOverlayFragment : Fragment() {
 
     fun dispatchKeyEvent(
         event: KeyEvent,
-        @VisibleForTesting(otherwise = NONE) menuInteractionMonitor: MenuInteractionMonitor = MenuInteractionMonitor
+        @VisibleForTesting(otherwise = VisibleForTesting.NONE) menuInteractionMonitor: MenuInteractionMonitor = MenuInteractionMonitor
     ): Boolean {
         // MenuInteractionMonitor broke, which went unnoticed for several releases, when the overlay was refactored into
         // a different Fragment: it might be safer to model this reactively, in our architecture, which abstracts away
@@ -268,8 +274,8 @@ class NavigationOverlayFragment : Fragment() {
     // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
     private fun observeAccountState(): Disposable {
         fun setUiToNotAuthenticated() {
-            binding.topNavContainer.fxaButton.setImageResource(R.drawable.ic_fxa_login)
-            binding.topNavContainer.fxaButton.contentDescription =
+            topNavBinding.fxaButton.setImageResource(R.drawable.ic_fxa_login)
+            topNavBinding.fxaButton.contentDescription =
                 resources.getString(R.string.fxa_navigation_item_new,
                     resources.getString(R.string.app_name))
         }
@@ -282,13 +288,13 @@ class NavigationOverlayFragment : Fragment() {
                 when (accountState) {
                     is AccountState.AuthenticatedWithProfile -> {
                         accountState.profile.avatarSetStrategy
-                            .setTransformation(RoundCornerTransformation(binding.topNavContainer.fxaButton.width.toFloat()))
-                            .invoke(binding.topNavContainer.fxaButton)
-                        binding.topNavContainer.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                            .setTransformation(RoundCornerTransformation(topNavBinding.fxaButton.width.toFloat()))
+                            .invoke(topNavBinding.fxaButton)
+                        topNavBinding.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                     }
                     AccountState.AuthenticatedNoProfile -> {
-                        binding.topNavContainer.fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
-                        binding.topNavContainer.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                        topNavBinding.fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
+                        topNavBinding.fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
 
                         val settings = Settings.getInstance(context!!)
                         if (settings.shouldShowFxaOnboarding()) {
@@ -304,8 +310,8 @@ class NavigationOverlayFragment : Fragment() {
                         resetFxaOnboardingShown()
                     }
                     AccountState.NeedsReauthentication -> {
-                        fxaButton.setImageResource(R.drawable.ic_fxa_needs_reauthentication)
-                        fxaButton.contentDescription =
+                        topNavBinding.fxaButton.setImageResource(R.drawable.ic_fxa_needs_reauthentication)
+                        topNavBinding.fxaButton.contentDescription =
                             resources.getString(R.string.fxa_navigation_item_sign_in_again)
                         resetFxaOnboardingShown()
                     }

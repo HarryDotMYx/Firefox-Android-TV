@@ -6,9 +6,8 @@ package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.NONE
 import io.sentry.Sentry
-import io.sentry.android.AndroidSentryClientFactory
+import io.sentry.android.core.SentryAndroid
 import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.settings.SettingsRepo
@@ -32,7 +31,7 @@ import org.mozilla.tv.firefox.settings.SettingsRepo
  */
 object SentryIntegration {
 
-    @VisibleForTesting(otherwise = NONE)
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     var isInit = false
         private set
 
@@ -56,7 +55,10 @@ object SentryIntegration {
                 // stored client and DSN, thus calling it with a null DSN will have the affect of
                 // disabling the client: https://github.com/getsentry/sentry-java/issues/574#issuecomment-378406105
                 val sentryDsn = if (isEnabled) BuildConfig.SENTRY_DSN else null
-                Sentry.init(sentryDsn, AndroidSentryClientFactory(appContext))
+                SentryAndroid.init(appContext) { options ->
+                    options.dsn = sentryDsn
+                    options.isEnabled = sentryDsn != null
+                }
             }
         }
     }
@@ -64,17 +66,17 @@ object SentryIntegration {
     /**
      * Sends the given [exception] to the Sentry servers without crashing the app.
      *
-     * @see [Sentry.capture]
+     * @see [Sentry.captureException]
      */
     fun capture(exception: Exception) {
-        Sentry.capture(exception)
+        Sentry.captureException(exception)
     }
 
     /**
      * Sends the given [exception] to the Sentry servers without crashing the app
      * and logs its message at the error level.
      *
-     * @see [Sentry.capture]
+     * @see [Sentry.captureException]
      */
     fun captureAndLogError(logger: Logger, exception: Exception) {
         // Note: instead, by adding the Log4j dependency, we may be able to get Sentry to log captures to logcat automatically.

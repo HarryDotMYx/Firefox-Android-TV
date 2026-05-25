@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import org.mozilla.tv.firefox.databinding.FragmentBrowserBinding
+import org.mozilla.tv.firefox.databinding.HintBarBinding
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.PointF
@@ -70,6 +71,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private var _binding: FragmentBrowserBinding? = null
     private val binding get() = _binding!!
+    private lateinit var hintBarBinding: HintBarBinding
 
     lateinit var session: Session
 
@@ -152,6 +154,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val context = inflater.context
         _binding = FragmentBrowserBinding.inflate(inflater, container, false)
         val layout = binding.root
+        hintBarBinding = HintBarBinding.bind(binding.root.findViewById(R.id.hintBarContainer))
 
         binding.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             context.serviceLocator.cursorModel.screenBounds = PointF(right.toFloat(), bottom.toFloat())
@@ -159,7 +162,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         context.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = binding.engineView::couldScrollInDirection
 
         // Setup the banner
-        binding.bannerLayout.bannerMoreInfoButton.setOnClickListener {
+        binding.bannerMoreInfoButton.setOnClickListener {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
@@ -240,7 +243,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         (binding.progressBar.layoutParams as? FrameLayout.LayoutParams)?.bottomMargin = progressBarBottomMargin
 
-        HintBinder.bindHintsToView(hintViewModel, binding.hintBar.root, animate = true)
+        HintBinder.bindHintsToView(hintViewModel, hintBarBinding.root, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
     }
 

@@ -12,7 +12,6 @@ import android.webkit.ValueCallback
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PRIVATE
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
@@ -274,7 +273,7 @@ fun EngineView.onResumeIfNotNull() {
 }
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
-@VisibleForTesting(otherwise = PRIVATE) val EngineView.webView: WebView?
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) val EngineView.webView: WebView?
     get() = getOrPutExtension(this).webView
 
 private val extensions = WeakHashMap<EngineView, EngineViewExtension>()
