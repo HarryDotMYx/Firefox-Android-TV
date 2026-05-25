@@ -7,11 +7,11 @@ package org.mozilla.tv.firefox.navigationoverlay
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
@@ -66,9 +66,11 @@ class ToolbarViewModel(
         )
     }
 
+    private val _legacyState = MutableLiveData<ToolbarViewModel.State>()
+    private val legacyStateDisposable: Disposable = state.subscribe { _legacyState.postValue(it) }
+
     @Deprecated(message = "Use ToolbarViewModel.state for new code")
-    val legacyState: LiveData<ToolbarViewModel.State> = LiveDataReactiveStreams
-        .fromPublisher(state.toFlowable(BackpressureStrategy.LATEST))
+    val legacyState: LiveData<ToolbarViewModel.State> = _legacyState
 
     @UiThread
     fun backButtonClicked() {
@@ -164,5 +166,9 @@ class ToolbarViewModel(
 
     private fun hideOverlay() {
         _events.onNext(Consumable.from(Action.SetOverlayVisible(false)))
+    }
+
+    override fun onCleared() {
+        legacyStateDisposable.dispose()
     }
 }

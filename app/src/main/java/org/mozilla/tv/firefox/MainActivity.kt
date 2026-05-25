@@ -81,6 +81,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val debugBinding = OverlayDebugBinding.bind(binding.root)
 
         val intentData = IntentValidator.validateOnCreate(this, safeIntent, savedInstanceState)
 
@@ -108,8 +109,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // TODO: refactor out the debug variant visibility check in #1953
         BuildConstants.debugLogStr?.apply {
             val engineViewVersion = (this@MainActivity as Context).application.getEngineViewVersion()
-            binding.debugLog.visibility = View.VISIBLE
-            binding.debugLog.text = "$this $engineViewVersion"
+            debugBinding.debugLog.visibility = View.VISIBLE
+            debugBinding.debugLog.text = "$this $engineViewVersion"
         }
     }
 

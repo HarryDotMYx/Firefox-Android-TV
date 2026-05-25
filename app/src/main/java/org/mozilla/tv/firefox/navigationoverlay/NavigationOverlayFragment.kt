@@ -443,7 +443,7 @@ class NavigationOverlayFragment : Fragment() {
     )
 
     private fun initSettingsChannel() {
-        binding.settingsTileContainer.adapter = SettingsChannelAdapter(
+        binding.settingsTileContainer.gridView.adapter = SettingsChannelAdapter(
                 loadUrl = { urlStr ->
                     onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
                 },
