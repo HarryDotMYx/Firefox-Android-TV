@@ -311,7 +311,7 @@ public class InlineAutocompleteEditText extends androidx.appcompat.widget.AppCom
         //
         // We disable autocomplete when the Fire TV remote app (from the Play Store) is entering
         // text input because autocomplete would be time consuming to implement: for full reasoning,
-        // see https://github.com/mozilla-mobile/firefox-tv/issues/276#issuecomment-365801269
+        // see https://github.com/HarryDotMYx/Firefox-Android-TV/issues/276#issuecomment-365801269
         // For a soft keyboard "Clear", it doesn't matter if we disable autocomplete.
         if (mDiscardAutoCompleteResult || isKeyFromRemoteAppOrSoftKeyboardClear) {
             return;

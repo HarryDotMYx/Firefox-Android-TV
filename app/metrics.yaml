@@ -13,9 +13,9 @@ legacy.ids:
     send_in_pings:
       - deletion_request
     bugs:
-      - https://github.com/mozilla-mobile/firefox-tv/issues/2989
+      - https://github.com/HarryDotMYx/Firefox-Android-TV/issues/2989
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-tv/pull/2992
+      - https://github.com/HarryDotMYx/Firefox-Android-TV/pull/2992
     notification_emails:
       - amazon-dev@mozilla.com
     expires: never

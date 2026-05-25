@@ -43,8 +43,8 @@ class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver 
         // [2] https://stackoverflow.com/a/32867602
         // [3] https://stackoverflow.com/a/33326970
         // [4] https://stackoverflow.com/a/17543769
-        // [5] https://github.com/mozilla-mobile/firefox-tv/issues/1276
-        // [6] https://github.com/mozilla-mobile/firefox-tv/issues/1256
+        // [5] https://github.com/HarryDotMYx/Firefox-Android-TV/issues/1276
+        // [6] https://github.com/HarryDotMYx/Firefox-Android-TV/issues/1256
         private var state: Bundle? = null
     }
 

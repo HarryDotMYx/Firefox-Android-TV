@@ -39,7 +39,7 @@
 # Warning: com.amazon.android.webkit.android.PreJellyBeanWebViewReflection: can't find referenced class android.webkit.WebBackForwardListClient
 -dontwarn android.webkit.WebBackForwardListClient
 
-# TODO: remove in https://github.com/mozilla-mobile/firefox-tv/issues/2153
+# TODO: remove in https://github.com/HarryDotMYx/Firefox-Android-TV/issues/2153
 -dontwarn kotlinx.atomicfu.*
 
 ####################################################################################################
@@ -49,6 +49,15 @@
 # Older Glean artifacts include local test server helpers that reference JUnit classes. They are not
 # used by the app at runtime, but R8 still sees the references while shrinking release builds.
 -dontwarn org.junit.**
+
+####################################################################################################
+# Gecko
+####################################################################################################
+
+# Gecko release shrinking sees optional desktop/JVM helper references from transitive dependencies.
+# They are not present on Android and are not used by the app at runtime.
+-dontwarn java.beans.**
+-dontwarn org.mozilla.geckoview.ContentBlockingController$ExceptionList
 
 ####################################################################################################
 # Android architecture components

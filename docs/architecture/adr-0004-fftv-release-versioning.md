@@ -2,7 +2,7 @@
 ## Context
 We build several different versions of Firefox for purposes such as release, beta testing, and staged rollout. It's not obvious how the version numbers are related to these types of builds, and features have sometimes disappeared in rollback versions, so we document our strategy here.
 
-Firefox TV releases are listed [https://github.com/mozilla-mobile/firefox-tv/releases](here). (These include LATs, which are not included in the changelog, and the changelog may include additional information, like reasons for re-releasing a version.)
+Firefox TV releases are listed [https://github.com/HarryDotMYx/Firefox-Android-TV/releases](here). (These include LATs, which are not included in the changelog, and the changelog may include additional information, like reasons for re-releasing a version.)
 
 As of the time of writing, the current release version is `3.9`.
 
@@ -11,7 +11,7 @@ Firefox TV versioning is based off of [https://semver.org/](semantic versioning)
 
 Additionally, we also use alphanumeric suffixes to clearly differentiate between early test builds, releases, and re-releases.
 
-Each release has a *tag* prefixed by `v`, such as `v3.8` and are listed in the [https://github.com/mozilla-mobile/firefox-tv/tags](Tags) page of the repo.
+Each release has a *tag* prefixed by `v`, such as `v3.8` and are listed in the [https://github.com/HarryDotMYx/Firefox-Android-TV/tags](Tags) page of the repo.
 
 ### Semantic Versioning
 * MAJOR version changes signal significant changes to UI or functionality

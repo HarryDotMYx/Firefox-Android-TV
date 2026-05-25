@@ -2,8 +2,8 @@
 
 # Firefox for Android TV
 
-[![Task Status](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/badge.svg)](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/latest)
-[![codecov](https://codecov.io/gh/mozilla-mobile/firefox-tv/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-tv)
+[![Task Status](https://github.taskcluster.net/v1/repository/HarryDotMYx/Firefox-Android-TV/master/badge.svg)](https://github.taskcluster.net/v1/repository/HarryDotMYx/Firefox-Android-TV/master/latest)
+[![codecov](https://codecov.io/gh/HarryDotMYx/Firefox-Android-TV/branch/master/graph/badge.svg)](https://codecov.io/gh/HarryDotMYx/Firefox-Android-TV)
 
 _Fast for good, just right for watching video at home. A browser for
 discovering and watching web video on the big screen TV for users to install on
@@ -18,10 +18,10 @@ Before you contribute, please read the [Community Participation
 Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
 
 * [Guide to Contributing][contribute] (**new contributors start here!**)
-* Open issues: https://github.com/mozilla-mobile/firefox-tv/issues
+* Open issues: https://github.com/HarryDotMYx/Firefox-Android-TV/issues
   * [`good first issues`][good first] | [`help wanted`][help]
   * [File a security issue][sec issue]
-* Project wiki: https://github.com/mozilla-mobile/firefox-tv/wiki
+* Project wiki: https://github.com/HarryDotMYx/Firefox-Android-TV/wiki
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
 
@@ -32,7 +32,7 @@ Dependencies:
 1. Clone the repository:
 
   ```shell
-  git clone https://github.com/mozilla-mobile/firefox-tv
+  git clone https://github.com/HarryDotMYx/Firefox-Android-TV
   ```
 
 1. Import the project into Android Studio or build on the command line:
@@ -51,13 +51,12 @@ adb connect <IP address>:5555
 ```
 
 And then install via Android Studio or adb. Only a single development device
-can be connected to a Fire TV at a time. Note that while you can install on an
-Android TV emulator, the behavior (particularly `WebView` behavior) is different 
-from Fire TV's and should not be relied upon.
+can be connected to a Fire TV at a time. This codebase currently requires
+Android 14 / API 34 or newer, so older Fire TV devices and emulator images
+will reject the APK during install.
 
-If using an emulator, we recommend the Android TV device image: either 720p or
-1080p is fine. API 22 (Stick) and 25 (4K) are best. You can press `cmd + m` to
-simulate a menu button press.
+If using an emulator, use an Android TV device image running API 34 or newer.
+You can press `cmd + m` to simulate a menu button press.
 
 ### Unit Testing
 To run a reasonable subset of the unit tests, we recommend:
@@ -99,7 +98,7 @@ git push <remote> --no-verify
 ```
 
 ### Release process
-(See [this doc](https://github.com/mozilla-mobile/firefox-tv/blob/master/.github/ISSUE_TEMPLATE/---relman-checklist.md) 
+(See [this doc](https://github.com/HarryDotMYx/Firefox-Android-TV/blob/master/.github/ISSUE_TEMPLATE/---relman-checklist.md) 
 for a description of our release process)
 
 ### Building release builds
@@ -155,9 +154,9 @@ another developer for access.
     file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 [amazon link]: https://www.amazon.com/dp/B078B5YMPD/ref=sr_1_1
-[dev guide]: https://github.com/mozilla-mobile/firefox-tv/wiki/Developer-guide-and-differences-from-Android
+[dev guide]: https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Developer-guide-and-differences-from-Android
 [contribute]: https://github.com/mozilla-mobile/shared-docs/blob/master/android/CONTRIBUTING.md
-[good first]: https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue
-[help]: https://github.com/mozilla-mobile/firefox-tv/labels/help%20wanted
+[good first]: https://github.com/HarryDotMYx/Firefox-Android-TV/labels/good%20first%20issue
+[help]: https://github.com/HarryDotMYx/Firefox-Android-TV/labels/help%20wanted
 [sec issue]: https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&bug_file_loc=http%3A%2F%2F&bug_ignored=0&bug_severity=normal&bug_status=NEW&cf_fx_iteration=---&cf_fx_points=---&component=Security%3A%20General&contenttypemethod=autodetect&contenttypeselection=text%2Fplain&defined_groups=1&flag_type-4=X&flag_type-607=X&flag_type-791=X&flag_type-800=X&flag_type-803=X&form_name=enter_bug&groups=firefox-core-security&maketemplate=Remember%20values%20as%20bookmarkable%20template&op_sys=Unspecified&priority=--&product=Firefox%20for%20FireTV&rep_platform=Unspecified&target_milestone=---&version=unspecified
 [adm]: https://developer.amazon.com/docs/adm/integrate-your-app.html#store-your-api-key-as-an-asset

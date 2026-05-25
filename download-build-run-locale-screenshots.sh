@@ -15,7 +15,7 @@
 # NOTE: Screengrabfile must target a specific device using:
 #       specific_device '#####'
 
-REPO="https://github.com/mozilla-mobile/firefox-tv.git"
+REPO="https://github.com/HarryDotMYx/Firefox-Android-TV.git"
 CLONE_DIR="$HOME/Desktop/firefox-tv"
 SCREENSHOTS_DIR="fastlane"
 CONFIG="Screengrabfile"

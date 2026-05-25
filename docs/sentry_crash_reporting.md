@@ -1,6 +1,6 @@
 # Sentry
 
-If there is anything in this document that is not clear, is incorrect, or that requires more detail, please file a request through a [GitHub](https://github.com/mozilla-mobile/firefox-tv/issues).**
+If there is anything in this document that is not clear, is incorrect, or that requires more detail, please file a request through a [GitHub](https://github.com/HarryDotMYx/Firefox-Android-TV/issues).**
 
 Firefox for Fire TV uses [Sentry](https://sentry.io) for crash and exception reporting. This kind of reporting gives Mozilla invaluable insight as to why Firefox crashes or incorrectly behaves. It is one of the key methods we use to improve the product in terms of stability.
 
@@ -153,4 +153,4 @@ java.lang.StringIndexOutOfBoundsException: Cannot create negative-length String
 In the explanations above, some redundant fields and field considered less important were omitted for brevity. To review these omissions, [this is an example of the raw data the server receives](https://gist.github.com/mcomella/50622aef817b40a20714b8550fb19991). This is up-to-date as of October 31, 2018.
 
 ## For developers
-For developer documentation such as how to enable Sentry in your builds, see [`SentryWrapper.kt`](https://github.com/mozilla-mobile/firefox-tv/blob/master/app/src/main/java/org/mozilla/focus/telemetry/SentryWrapper.kt) in the code base.
+For developer documentation such as how to enable Sentry in your builds, see [`SentryWrapper.kt`](https://github.com/HarryDotMYx/Firefox-Android-TV/blob/master/app/src/main/java/org/mozilla/focus/telemetry/SentryWrapper.kt) in the code base.

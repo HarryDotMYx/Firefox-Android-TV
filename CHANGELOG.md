@@ -237,7 +237,7 @@ These version numbers were skipped due to build errors. They had to be re-built 
 ### Changed
 - Hide Pocket video tile on non-EN locales
     - Pocket does not yet provide content for other languages
-- Sentry crash reports include a UUID to distinguish users so we can determine if it's 1 user crashing 100 times or 100 users crashing 1 time each. This identifier is only used for Sentry and can not be correlated with telemetry interaction data. See [fire TV Sentry docs](https://github.com/mozilla-mobile/firefox-tv/wiki/Crash-reporting-with-Sentry) for more details. (#817)
+- Sentry crash reports include a UUID to distinguish users so we can determine if it's 1 user crashing 100 times or 100 users crashing 1 time each. This identifier is only used for Sentry and can not be correlated with telemetry interaction data. See [fire TV Sentry docs](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Crash-reporting-with-Sentry) for more details. (#817)
 - Pocket videos now display the author of the video instead of the platform
 
 ### Fixed

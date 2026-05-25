@@ -174,13 +174,13 @@ When the bug was fixed, it was updated to `fxa_preboarding_not_now2`. The previo
 | MediaSession: seek                         | action   | click_or_voice | media_session | seek           |
 | MediaSession: play/pause remote button     | action   | click          | media_session | play_pause_btn |
 
-Fire OS controls media (e.g. videos, audio) playback with a `MediaSession`. MediaSession probes are sent when the user interacts with media through Fire OS (e.g. hardware media buttons, voice commands) **but not** when they interact through web content (e.g. pressing pause with the dpad Cursor). Right now, MediaSession **only supports video** ([#935](https://github.com/mozilla-mobile/firefox-tv/issues/935) is to add audio support).
+Fire OS controls media (e.g. videos, audio) playback with a `MediaSession`. MediaSession probes are sent when the user interacts with media through Fire OS (e.g. hardware media buttons, voice commands) **but not** when they interact through web content (e.g. pressing pause with the dpad Cursor). Right now, MediaSession **only supports video** ([#935](https://github.com/HarryDotMYx/Firefox-Android-TV/issues/935) is to add audio support).
 
 MediaSession doesn't distinguish between hardware buttons and voice commands. If you want to calculate how often voice commands are used for a given command, you should subtract the number of hardware buttons used for a command (if applicable) from the total number of invocations for that command, e.g.: `play_pause_voice_commands = play + pause - play_pause_btn`. The only media button that interacts with MediaSession on a standard Fire TV remote is the play/pause button. 
 
 To elaborate on these events:
 - "Next/previous item" is intended to go to the next video/song in a playlist. We send the corresponding key event to the page which must support this functionality (it works on YouTube).
-- "Seek" aggregates the "fast-forward", "rewind", and "restart" commands ([#988](https://github.com/mozilla-mobile/firefox-tv/issues/988) is to split up this telemetry)
+- "Seek" aggregates the "fast-forward", "rewind", and "restart" commands ([#988](https://github.com/HarryDotMYx/Firefox-Android-TV/issues/988) is to split up this telemetry)
 
 ### Pocket Channel
 | Event                                      | category | method         | object        | value          |

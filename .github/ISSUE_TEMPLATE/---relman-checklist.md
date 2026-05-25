@@ -19,24 +19,24 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 - [ ] Create PR for bumping version (`X.X-LAT1`)
   - Merge to master
 - [ ] Cut LAT branch `releases/vX.X-LAT1` (this must include a-c upgrade)
-- [ ] Create GitHub pre-release build `vX.X-LAT1`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
+- [ ] Create GitHub pre-release build `vX.X-LAT1`([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#final-builds))
 - [ ] Wait for automation to email the team mailing list, signalling that the build is done
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
-  - [ ] Email team announcing release ([template/instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
+  - [ ] Email team announcing release ([template/instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Wednesday # 2 (soft code freeze = noon PT)
 
 - [ ] Create PR for bumping version (`X.X-LAT2`)
   - Merge to master
 - [ ] Cut LAT branch `releases/vX.X-LAT2`
-- [ ] Create GitHub pre-release build `vX.X-LAT2` ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
+- [ ] Create GitHub pre-release build `vX.X-LAT2` ([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#final-builds))
 - [ ] Wait for automation to email the team mailing list, signalling that the build is done
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
-  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
+  - [ ] Email team announcing release ([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Thursday # 2
 
-- [ ] [QA] run screenshot test and upload ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Localization#screenshots))
+- [ ] [QA] run screenshot test and upload ([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Localization#screenshots))
 - [ ] Upgrade a-c on master
 - [ ] File new Release Management checklist with next version and add to top of Backlog
 
@@ -51,19 +51,19 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
     features are missing and add the new release header (don't forget to add the diff links at the bottom)
   - Merge to master
 - [ ] Cut release branch `releases/vX.X`
-- [ ] Create GitHub release build `vX.X`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
+- [ ] Create GitHub release build `vX.X`([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#final-builds))
 - [ ] Wait for automation to email the team mailing list, signalling that the build is done and uploaded to a pending "upcoming release" in the Amazon console
 - [ ] Submit app with staged rollout at 1% ([instructions](https://developer.amazon.com/docs/app-submission/submitting-apps-to-amazon-appstore.html))
-  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
+  - [ ] Email team announcing release ([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Tuesday # 3
 
 - [ ] [QA] sign-off
 - [ ] Bump rollout to 20%
-  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
+  - [ ] Email team announcing release ([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Wednesday # 3
 
 - [ ] [QA] sign-off
 - [ ] Bump rollout to 100%
-  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
+  - [ ] Email team announcing release ([instructions](https://github.com/HarryDotMYx/Firefox-Android-TV/wiki/Release-Management-Checklist#release-announcement-emails))
