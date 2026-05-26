@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.channels.pinnedtile
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.os.Looper
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -52,7 +53,7 @@ class PinnedTileRepo(
     private val _sharedPreferences: SharedPreferences = applicationContext.getSharedPreferences(PREF_HOME_TILES, Context.MODE_PRIVATE)
 
     init {
-        _pinnedTiles.subscribe { _legacyPinnedTiles.postValue(it) }
+        _pinnedTiles.subscribe { _legacyPinnedTiles.setValueOnMainThread(it) }
         _pinnedTiles.onNext(loadTilesCache())
     }
 
@@ -167,5 +168,15 @@ class PinnedTileRepo(
         customTilesSize = lhm.size
 
         return lhm
+    }
+
+    private fun MutableLiveData<LinkedHashMap<String, PinnedTile>>.setValueOnMainThread(
+        tiles: LinkedHashMap<String, PinnedTile>
+    ) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            value = tiles
+        } else {
+            postValue(tiles)
+        }
     }
 }

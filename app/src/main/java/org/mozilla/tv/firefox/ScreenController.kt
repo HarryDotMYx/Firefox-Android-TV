@@ -111,6 +111,15 @@ class ScreenController(private val sessionRepo: SessionRepo) {
         webRenderFragment.loadUrl(url)
     }
 
+    fun selectSession(fragmentManager: FragmentManager, session: Session) {
+        sessionRepo.selectSession(session)
+        val renderFragment = WebRenderFragment.createForSession(session)
+        fragmentManager
+            .beginTransaction()
+            .replace(R.id.container_web_render, renderFragment, WebRenderFragment.FRAGMENT_TAG)
+            .commit()
+    }
+
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)

@@ -75,7 +75,7 @@ fun EngineView.updateFullscreenScrollPosition() {
 }
 
 fun EngineView.addSubmitListenerToInputElements() {
-    throw NotImplementedError("This has not been implemented in Gecko. Please move over System implementation")
+    // No action necessary for Gecko.
 }
 
 private fun EngineView.evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
@@ -182,7 +182,7 @@ val EngineView.backForwardList: WebHistory
     get() = WebHistory
 
 fun EngineView.maybeGoBackBeforeFxaSignIn() {
-    TODO("implemented only with system WebView to speed up development")
+    // No action necessary for Gecko.
 }
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache

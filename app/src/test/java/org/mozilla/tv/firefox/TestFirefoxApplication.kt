@@ -4,11 +4,14 @@
 
 package org.mozilla.tv.firefox
 
-import mozilla.components.service.glean.Glean
 import androidx.work.testing.WorkManagerTestInitHelper
 import mozilla.components.concept.engine.utils.EngineVersion
+import org.mozilla.telemetry.TelemetryHolder
+import org.mozilla.tv.firefox.components.locale.Locales
 import org.mozilla.tv.firefox.helpers.EngineVariantFunctionality
 import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
+import org.mozilla.tv.firefox.telemetry.SentryIntegration
+import org.mozilla.tv.firefox.telemetry.TelemetryFactory
 
 /**
  * The application class used by the [FirefoxRobolectricTestRunner]: this class may modified to run additional
@@ -44,11 +47,18 @@ class TestFirefoxApplication : FirefoxApplication() {
      */
     override fun getEngineViewVersion() = EngineVersion(1, 1, 1, "dummyVersion")
 
+    override fun onCreate() {
+        Locales.initializeLocale(this)
+        serviceLocator = createServiceLocator()
+        WorkManagerTestInitHelper.initializeTestWorkManager(applicationContext)
+        SentryIntegration.init(this, serviceLocator.settingsRepo)
+        TelemetryHolder.set(TelemetryFactory.createTelemetry(this))
+    }
+
     /**
      * This is used to disable ping upload when running tests.
      */
     override fun setGleanUpload() {
         WorkManagerTestInitHelper.initializeTestWorkManager(applicationContext)
-        Glean.setUploadEnabled(false)
     }
 }

@@ -28,6 +28,7 @@
     <!-- Title text displayed above the music tile channel. Channels are a collection of links
     to commonly used sites that are bundled with the app. -->
     <string name="music_channel_title" translatable="false">Music</string>
+    <string name="tabs_channel_title" translatable="false">Open Tabs</string>
     <!-- Title text displayed above the food tile channel. Channels are a collection of links
     to commonly used sites that are bundled with the app. -->
     <string name="food_channel_title" translatable="false">Food</string>

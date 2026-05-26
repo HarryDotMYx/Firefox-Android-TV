@@ -9,13 +9,17 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk {
+        version = release(36) {
+            it.minorApiLevel = 1
+        }
+    }
     namespace = "org.mozilla.tv.firefox"
 
     defaultConfig {
         applicationId "org.mozilla.tv.firefox"
         minSdk = 26
-        targetSdk = 28
+        targetSdk = 36
         versionCode = 11
         versionName = "4.8-PGMAFX"
         testInstrumentationRunner = "org.mozilla.tv.firefox.FirefoxOnDeviceTestRunner"
@@ -64,12 +68,9 @@ android {
         }
     }
 
-    /*
     testOptions {
         unitTests.includeAndroidResources = true
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
-    */
 
     sourceSets {
         test {
@@ -107,15 +108,15 @@ configurations {
 dependencies {
     implementation 'io.sentry:sentry-android:6.34.0'
 
-    implementation "androidx.appcompat:appcompat:1.7.0"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "androidx.browser:browser:1.8.0"
-    implementation "com.google.android.material:material:1.12.0"
+    implementation "androidx.browser:browser:1.10.0"
+    implementation "com.google.android.material:material:1.13.0"
     implementation "androidx.leanback:leanback:1.0.0"
-    implementation "androidx.recyclerview:recyclerview:1.3.2"
-    implementation "androidx.core:core-ktx:1.13.1"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.recyclerview:recyclerview:1.4.0"
+    implementation "androidx.core:core-ktx:1.18.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.2.1"
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.work:work-runtime-ktx:$androidx_work_version"
     implementation 'com.squareup.picasso:picasso:2.8'
@@ -168,11 +169,11 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation "androidx.test.ext:junit:$junit"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
-    testImplementation 'org.mockito:mockito-core:5.12.0'
-    testImplementation "io.mockk:mockk:1.13.12"
+    testImplementation 'org.mockito:mockito-core:5.23.0'
+    testImplementation "io.mockk:mockk:1.14.6"
 
     testImplementation "androidx.test:core:$test_core"
-    testImplementation "androidx.work:work-testing:2.9.1"
+    testImplementation "androidx.work:work-testing:$androidx_work_version"
     androidTestImplementation "androidx.test:core:$test_core"
 
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
@@ -192,7 +193,7 @@ dependencies {
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
 
-    testImplementation "org.mozilla.telemetry:glean-native-forUnitTests:61.1.1"
+    testImplementation "org.mozilla.telemetry:glean-native-forUnitTests:67.3.2"
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 

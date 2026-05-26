@@ -37,6 +37,12 @@ class ADMIntegration(private val app: Application) {
         } catch (e: ClassNotFoundException) {
             logger.warn("ADM is not available on this device.")
             false
+        } catch (e: RuntimeException) {
+            logger.warn("ADM is not available on this device.")
+            false
+        } catch (e: LinkageError) {
+            logger.warn("ADM is not available on this device.")
+            false
         }
     }
 

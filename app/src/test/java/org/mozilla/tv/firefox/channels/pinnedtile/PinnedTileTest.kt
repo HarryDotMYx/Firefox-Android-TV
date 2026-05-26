@@ -16,16 +16,20 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ScreenController
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
+import org.mozilla.tv.firefox.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.ImageSetStrategy
+import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -38,8 +42,6 @@ const val DEFAULT_PINNED_TILE_COUNT = 10
 /**
  * Unit tests for pinned tile operations in [NavigationOverlayViewModel].
  */
-@Ignore(value = "This test needs to be rethought. Most of the tested functionality currently " +
-    "belongs to the ChannelRepo, not the PinnedTileRepo.  Should these classes be merged?")
 @RunWith(FirefoxRobolectricTestRunner::class)
 class PinnedTileTest {
 
@@ -74,17 +76,37 @@ class PinnedTileTest {
         every { channelRepo.getNewsTiles() } answers { Observable.just(listOf()) }
         every { channelRepo.getMusicTiles() } answers { Observable.just(listOf()) }
         every { channelRepo.getSportsTiles() } answers { Observable.just(listOf()) }
+        every { sessionRepo.state } answers {
+            BehaviorSubject.createDefault(SessionRepo.State(
+                backEnabled = false,
+                forwardEnabled = false,
+                desktopModeActive = false,
+                turboModeActive = false,
+                currentUrl = "firefox:home",
+                loading = false
+            ))
+        }
+        every { sessionRepo.sessions } answers { Observable.just(listOf()) }
+        every { screenController.currentActiveScreen } answers {
+            BehaviorSubject.createDefault(ActiveScreen.WEB_RENDER)
+        }
 
         channelTitles = ChannelTitles(
             pinned = "pinned",
             newsAndPolitics = "news",
             sports = "sports",
             music = "music",
-            food = "food"
+            food = "food",
+            tabs = "tabs"
         )
 
         val appContext: Context = ApplicationProvider.getApplicationContext()
         pinnedTileRepo = PinnedTileRepo(appContext)
+        every { channelRepo.getPinnedTiles() } answers {
+            pinnedTileRepo.pinnedTiles.map { tiles ->
+                tiles.values.map { it.toTestChannelTile() }
+            }
+        }
         overlayVm = NavigationOverlayViewModel(
                 screenController,
                 channelTitles,
@@ -94,7 +116,8 @@ class PinnedTileTest {
                     pinnedTileRepo = pinnedTileRepo
                 ),
                 mockk(),
-                mockk()
+                mockk(),
+                sessionRepo
         )
         testObserver = overlayVm.pinnedTiles.test()
     }
@@ -116,7 +139,7 @@ class PinnedTileTest {
     @Test
     fun `WHEN repo emits an updated list after remove THEN view model should emit an updated list`() {
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
-//        overlayVm.unpinPinnedTile("https://www.instagram.com/")
+        pinnedTileRepo.removePinnedTile("https://www.instagram.com/")
         assertEquals(2, testObserver.valueCount())
         assertEquals(DEFAULT_PINNED_TILE_COUNT - 1, testObserver.values().last().tileList.size)
     }
@@ -124,8 +147,22 @@ class PinnedTileTest {
     @Test
     fun `WHEN repo fails to remove an item THEN view model should emit nothing`() {
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
-//        overlayVm.unpinPinnedTile("https://example.com/")
+        pinnedTileRepo.removePinnedTile("https://example.com/")
         assertEquals(1, testObserver.valueCount())
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
+    }
+
+    private fun PinnedTile.toTestChannelTile(): ChannelTile {
+        return ChannelTile(
+            url = url,
+            title = title,
+            subtitle = null,
+            setImage = ImageSetStrategy.ByPath(""),
+            tileSource = when (this) {
+                is BundledPinnedTile -> TileSource.BUNDLED
+                is CustomPinnedTile -> TileSource.CUSTOM
+            },
+            id = idToString()
+        )
     }
 }

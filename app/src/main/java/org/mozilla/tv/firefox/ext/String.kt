@@ -79,8 +79,14 @@ fun String?.toJavaURI(): URI? = if (this == null) {
 // TODO: move to Uri class android-components#648
 // This algorithm is imperfect but we've used it for a while.
 val String.isUriYouTubeTV: Boolean
-    get() = lowercase().contains("youtube.com/tv") ||
-            lowercase().contains("ftv.cdn.mozilla.net/ytht")
+    get() {
+        val uri = trim().toJavaURI() ?: return false
+        val host = uri.host?.lowercase() ?: return false
+        val path = uri.path?.lowercase() ?: return false
+
+        return (host == "www.youtube.com" && (path == "/tv" || path.startsWith("/tv/"))) ||
+            (host == "ftv.cdn.mozilla.net" && path == "/ytht")
+    }
 
 val String.isUriYouTubeTvVideo: Boolean
     get() = this.isUriYouTubeTV &&

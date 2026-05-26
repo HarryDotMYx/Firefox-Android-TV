@@ -26,7 +26,6 @@
 
     <!-- Attribute usesCleartextTraffic requires API 23+, tools:ignore="UnusedAttribute" for lint check-->
     <application
-        android:extractNativeLibs="true"
         android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:banner="@mipmap/ic_launcher"

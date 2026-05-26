@@ -46,13 +46,19 @@ class SessionObserverHelper private constructor(sessionRepo: SessionRepo) {
     // Any time a new session is created, add a sessionObserver to it.
     // When a session is removed, remove the sessionObserver.
     val sessionManagerObserver = object : SessionManager.Observer {
+        override fun onSessionAdded(session: Session) {
+            sessionRepo.updateSessions()
+        }
+
         override fun onSessionSelected(session: Session) {
             session.register(sessionObserver)
             sessionRepo.update()
+            sessionRepo.updateSessions()
         }
 
         override fun onSessionRemoved(session: Session) {
             session.unregister(sessionObserver)
+            sessionRepo.updateSessions()
         }
     }
 }

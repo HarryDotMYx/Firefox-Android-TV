@@ -70,7 +70,17 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onCreate(savedInstanceState)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            private var lastBackPressTime: Long = 0
+            private val DOUBLE_BACK_INTERVAL = 1000
+
             override fun handleOnBackPressed() {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastBackPressTime < DOUBLE_BACK_INTERVAL) {
+                    serviceLocator.screenController.showNavigationOverlay(supportFragmentManager, true)
+                    return
+                }
+                lastBackPressTime = currentTime
+
                 if (serviceLocator.screenController.handleBack(supportFragmentManager)) return
 
                 // If you're here that means there's nothing else in the fragment backstack; therefore, clear session

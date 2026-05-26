@@ -12,7 +12,7 @@ import org.robolectric.annotation.Implements
 /**
  * Custom Shadow for [ADM]
  */
-@Implements(ADM::class)
+@Implements(ADM::class, isInAndroidSdk = false)
 class ShadowADM {
 
     /**

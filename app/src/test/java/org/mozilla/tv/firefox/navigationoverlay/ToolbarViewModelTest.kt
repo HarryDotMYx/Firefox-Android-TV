@@ -14,6 +14,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mozilla.tv.firefox.channels.pinnedtile.BundledPinnedTile
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTile
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ext.map
@@ -131,7 +132,7 @@ class ToolbarViewModelTest {
     fun `WHEN current url is pinned THEN pinChecked should be true`() {
         @Suppress("DEPRECATION")
         toolbarVm.legacyState.map { it.pinChecked }.assertValues(true, true, true) {
-            val tile = mock(PinnedTile::class.java)
+            val tile = BundledPinnedTile(google, "Google", "google.png", "google")
             pinnedTiles.onNext(linkedMapOf(google to tile, facebook to tile, wikipedia to tile))
             sessionState.onNext(SessionRepo.State(
                 backEnabled = true,

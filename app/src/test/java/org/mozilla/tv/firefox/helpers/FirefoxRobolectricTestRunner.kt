@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.helpers
 
+import org.mozilla.tv.firefox.TestFirefoxApplication
 import org.mozilla.tv.firefox.helpers.shadows.ShadowADM
 import org.mozilla.tv.firefox.helpers.shadows.ShadowADMMessageHandlerBase
 import org.mozilla.tv.firefox.helpers.shadows.ShadowADMMessageReceiver
@@ -24,7 +25,9 @@ class FirefoxRobolectricTestRunner(testClass: Class<*>) : RobolectricTestRunner(
             arrayOf(ShadowADMMessageHandlerBase::class, ShadowADMMessageReceiver::class, ShadowADM::class)
 
         return Config.Builder(defaultConfig)
-            .setShadows(shadows.map { it.java }.toTypedArray())
+            .setSdk(36)
+            .setApplication(TestFirefoxApplication::class.java)
+            .setShadows(*shadows.map { it.java }.toTypedArray())
             .build()
     }
 }

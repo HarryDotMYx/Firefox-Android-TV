@@ -12,7 +12,7 @@ import org.robolectric.annotation.Implements
 /**
  * Custom Shadow for [ADMMessageReceiver]
  */
-@Implements(ADMMessageReceiver::class)
+@Implements(ADMMessageReceiver::class, isInAndroidSdk = false)
 class ShadowADMMessageReceiver {
 
     /**

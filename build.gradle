@@ -5,24 +5,24 @@
 import org.mozilla.gradle.Dependencies
 
 buildscript {
-    ext.androidx_version = '1.7.0'
-    ext.architecture_components_version = '2.8.6'
-    ext.kotlin_version = '2.2.10'
-    ext.coroutines_version = '1.8.1'
+    ext.androidx_version = '1.7.1'
+    ext.architecture_components_version = '2.10.0'
+    ext.kotlin_version = '2.3.21'
+    ext.coroutines_version = '1.10.2'
     ext.moz_components_version = '24.0.1'
-    ext.androidx_work_version = '2.9.1'
+    ext.androidx_work_version = '2.11.1'
     ext.adm_version = '1.0.1'
     ext.oss_licenses_version = '17.1.0'
 
-    ext.robolectric_version = '4.13'
+    ext.robolectric_version = '4.16.1'
 
-    ext.test_core = '1.6.1'
-    ext.test_runner = '1.6.2'
-    ext.test_rules = '1.6.1'
-    ext.test_orchestrator = '1.5.0'
-    ext.espresso_version = '3.6.1'
+    ext.test_core = '1.7.0'
+    ext.test_runner = '1.7.0'
+    ext.test_rules = '1.7.0'
+    ext.test_orchestrator = '1.6.1'
+    ext.espresso_version = '3.7.0'
     ext.uiautomator_version = '2.3.0'
-    ext.junit = "1.2.1"
+    ext.junit = "1.3.0"
 
     repositories {
         google()
@@ -39,9 +39,9 @@ buildscript {
 }
 
 plugins {
-    id 'com.android.application' version '8.13.2' apply false
-    id 'org.jetbrains.kotlin.android' version '2.2.10' apply false
-    id 'org.jetbrains.kotlin.kapt' version '2.2.10' apply false
+    id 'com.android.application' version '9.2.0' apply false
+    id 'org.jetbrains.kotlin.android' version '2.3.21' apply false
+    id 'org.jetbrains.kotlin.kapt' version '2.3.21' apply false
     id 'com.google.android.gms.oss-licenses-plugin' version '0.12.0' apply false
     id "io.gitlab.arturbosch.detekt" version "1.23.7"
 }

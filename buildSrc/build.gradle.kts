@@ -13,5 +13,5 @@ repositories {
 
 dependencies {
     // We cannot share dependencies with the project because we can't access buildscript.ext.
-    compileOnly("com.android.tools.build:gradle:8.13.2")
+    compileOnly("com.android.tools.build:gradle:9.2.0")
 }

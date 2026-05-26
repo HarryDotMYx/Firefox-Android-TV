@@ -55,7 +55,8 @@ class ViewModelFactory(
                     newsAndPolitics = resources.getString(R.string.news_channel_title),
                     sports = resources.getString(R.string.sports_channel_title),
                     music = resources.getString(R.string.music_channel_title),
-                    food = resources.getString(R.string.food_channel_title)
+                    food = resources.getString(R.string.food_channel_title),
+                    tabs = resources.getString(R.string.tabs_channel_title)
                 ),
                 serviceLocator.channelRepo,
                 ToolbarViewModel(
@@ -63,7 +64,8 @@ class ViewModelFactory(
                         pinnedTileRepo = serviceLocator.pinnedTileRepo
                 ),
                 serviceLocator.fxaRepo,
-                serviceLocator.fxaLoginUseCase
+                serviceLocator.fxaLoginUseCase,
+                serviceLocator.sessionRepo
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(

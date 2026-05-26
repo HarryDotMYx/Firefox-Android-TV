@@ -69,7 +69,7 @@ class ChannelRepo(
                 addBundleTileToBlackList(tileData.tileSource, tileData.id)
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
-            TileSource.NEWS, TileSource.SPORTS, TileSource.MUSIC -> {
+            TileSource.NEWS, TileSource.SPORTS, TileSource.MUSIC, TileSource.TABS -> {
                 addBundleTileToBlackList(tileData.tileSource, tileData.id)
             }
         }
@@ -87,7 +87,7 @@ class ChannelRepo(
             TileSource.NEWS -> blacklistedNewsIds.onNext(blackList)
             TileSource.SPORTS -> blacklistedSportsIds.onNext(blackList)
             TileSource.MUSIC -> blacklistedMusicIds.onNext(blackList)
-            else -> Unit
+            TileSource.CUSTOM, TileSource.TABS -> Unit
         }
 
         saveBlackList(source, blackList)
@@ -99,7 +99,7 @@ class ChannelRepo(
             TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
             TileSource.SPORTS -> BUNDLED_SPORTS_ID_BLACKLIST
             TileSource.MUSIC -> BUNDLED_MUSIC_ID_BLACKLIST
-            else -> throw NotImplementedError("other types shouldn't be able remove tiles")
+            TileSource.CUSTOM, TileSource.TABS -> ""
         }
 
         return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!
@@ -111,7 +111,7 @@ class ChannelRepo(
             TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
             TileSource.SPORTS -> BUNDLED_SPORTS_ID_BLACKLIST
             TileSource.MUSIC -> BUNDLED_MUSIC_ID_BLACKLIST
-            else -> throw NotImplementedError("other types shouldn't be able remove tiles")
+            TileSource.CUSTOM, TileSource.TABS -> ""
         }
 
         _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList.toSet()).apply()

@@ -45,6 +45,9 @@ class SessionRepo(
     private val _state: BehaviorSubject<State> = BehaviorSubject.create()
     val state: Observable<State> = _state.hide()
 
+    private val _sessions: BehaviorSubject<List<Session>> = BehaviorSubject.createDefault(emptyList())
+    val sessions: Observable<List<Session>> = _sessions.hide()
+
     private val _events: Subject<Event> = PublishSubject.create()
     val events: Observable<Event> = _events.hide()
 
@@ -93,6 +96,11 @@ class SessionRepo(
             )
             _state.onNextIfNew(newState)
         }
+    }
+
+    @AnyThread
+    fun updateSessions() {
+        _sessions.onNext(sessionManager.sessions)
     }
 
     fun currentURLScreenshot(): Bitmap? = session?.thumbnail
@@ -144,6 +152,10 @@ class SessionRepo(
 
     fun setTurboModeEnabled(enabled: Boolean) {
         turboMode.isEnabled = enabled
+    }
+
+    fun selectSession(session: Session) {
+        sessionManager.select(session)
     }
 
     private val session: Session? get() = sessionManager.selectedSession

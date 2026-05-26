@@ -11,7 +11,7 @@ import org.robolectric.annotation.Implements
 /**
  * Custom Shadow for [ADMMessageHandlerBase]
  */
-@Implements(ADMMessageHandlerBase::class)
+@Implements(ADMMessageHandlerBase::class, isInAndroidSdk = false)
 class ShadowADMMessageHandlerBase {
 
     /**

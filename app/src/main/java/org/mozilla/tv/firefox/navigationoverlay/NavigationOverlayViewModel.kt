@@ -17,6 +17,10 @@ import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
+import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.ImageSetStrategy
+import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 class ChannelTitles(
@@ -24,7 +28,8 @@ class ChannelTitles(
     val newsAndPolitics: String,
     val sports: String,
     val music: String,
-    val food: String
+    val food: String,
+    val tabs: String
 )
 
 class NavigationOverlayViewModel(
@@ -33,7 +38,8 @@ class NavigationOverlayViewModel(
     channelRepo: ChannelRepo,
     toolbarViewModel: ToolbarViewModel,
     private val fxaRepo: FxaRepo,
-    private val fxaLoginUseCase: FxaLoginUseCase
+    private val fxaLoginUseCase: FxaLoginUseCase,
+    private val sessionRepo: SessionRepo
 ) : ViewModel() {
 
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
@@ -47,6 +53,23 @@ class NavigationOverlayViewModel(
 
     val musicChannel: Observable<ChannelDetails> = channelRepo.getMusicTiles()
         .map { ChannelDetails(title = channelTitles.music, tileList = it) }
+
+    val tabsChannel: Observable<ChannelDetails> = sessionRepo.sessions
+        .map { sessions ->
+            ChannelDetails(
+                title = channelTitles.tabs,
+                tileList = sessions.map { session ->
+                    ChannelTile(
+                        url = session.url,
+                        title = if (session.title.isEmpty()) session.url else session.title,
+                        subtitle = session.url,
+                        setImage = ImageSetStrategy.ById(R.id.navButtonReload), // Using an ID for now
+                        tileSource = TileSource.TABS,
+                        id = session.id
+                    )
+                }
+            )
+        }
 
     fun shouldBeDisplayed(channelDetails: Observable<ChannelDetails>): Observable<Boolean> =
         channelDetails.map { it.tileList.isNotEmpty() }

@@ -44,7 +44,18 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
         val runtimeSettingsBuilder = GeckoRuntimeSettings.Builder()
         // Pass necessary flags to disable features that crash on modern Android (API 29+)
         // due to ashmem/sandbox restrictions.
-        runtimeSettingsBuilder.arguments(arrayOf("--disable-gpu-sandbox", "--disable-sandbox"))
+        // Also disable Remote Settings and experiments to avoid errors from decommissioned servers.
+        runtimeSettingsBuilder.arguments(arrayOf(
+                "--disable-gpu-sandbox",
+                "--disable-sandbox",
+                "--pref", "services.settings.enabled=false",
+                "--pref", "services.settings.server=\"\"",
+                "--pref", "experiments.enabled=false",
+                "--pref", "experiments.supported=false",
+                "--pref", "network.allow-experiments=false",
+                "--pref", "datareporting.policy.dataSubmissionEnabled=false",
+                "--pref", "datareporting.healthreport.uploadEnabled=false"
+        ))
 
         if (BuildConstants.isDevBuild) {
             // In debug builds, allow to invoke via an Intent that has extras customizing Gecko.

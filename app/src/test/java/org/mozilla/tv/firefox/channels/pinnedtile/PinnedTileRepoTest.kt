@@ -12,10 +12,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.spy
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.util.UUID
 
@@ -54,80 +50,80 @@ class PinnedTileRepoTest {
 
     @Test
     fun `WHEN repo fetches initial tileList THEN repo should emit a feed of only bundled tile list`() {
-        val observerSpy = spy(Observer<LinkedHashMap<String, PinnedTile>> {
+        val observer = CountingObserver<LinkedHashMap<String, PinnedTile>> {
             assertNotNull(it)
             assertEquals(BUNDLED_TILE_COUNT, (it as LinkedHashMap<String, PinnedTile>).size)
-        })
+        }
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
-        verify(observerSpy, times(1)).onChanged(any())
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observer)
+        assertEquals(1, observer.callCount)
     }
 
     @Test
     fun `WHEN repo adds a new pin THEN repo should emit a combined list of bundled and custom`() {
-        val observerSpy = spy(Observer<LinkedHashMap<String, PinnedTile>> {
+        val observer = CountingObserver<LinkedHashMap<String, PinnedTile>> {
             assertNotNull(it)
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT || it.size == BUNDLED_TILE_COUNT + 1)
-        })
+        }
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observer)
         assertEquals(0, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
         assertEquals(1, pinnedTileRepo.customTilesSize)
 
-        verify(observerSpy, times(2)).onChanged(any())
+        assertEquals(2, observer.callCount)
     }
 
     @Test
     fun `WHEN repo removes a bundled pin THEN repo should emit a smaller list and bundled size`() {
-        val observerSpy = spy(Observer<LinkedHashMap<String, PinnedTile>> {
+        val observer = CountingObserver<LinkedHashMap<String, PinnedTile>> {
             assertNotNull(it)
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT || it.size == BUNDLED_TILE_COUNT - 1)
-        })
+        }
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observer)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://www.pinterest.com/")
         assertEquals(9, pinnedTileRepo.bundledTilesSize)
 
-        verify(observerSpy, times(2)).onChanged(any())
+        assertEquals(2, observer.callCount)
     }
 
     @Test
     fun `WHEN repo fails to remove a bundled pin THEN repo should maintain same bundled size`() {
-        val observerSpy = spy(Observer<LinkedHashMap<String, PinnedTile>> {
+        val observer = CountingObserver<LinkedHashMap<String, PinnedTile>> {
             assertNotNull(it)
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT)
-        })
+        }
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observer)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://example.com/")
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
 
-        verify(observerSpy, times(1)).onChanged(any())
+        assertEquals(1, observer.callCount)
     }
 
     @Test
     fun `WHEN repo removes a custom pin THEN repo should emit a smaller list and custom size`() {
-        val observerSpy = spy(Observer<LinkedHashMap<String, PinnedTile>> {
+        val observer = CountingObserver<LinkedHashMap<String, PinnedTile>> {
             assertNotNull(it)
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT || it.size == BUNDLED_TILE_COUNT + 1)
-        })
+        }
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observer)
         assertEquals(0, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
         assertEquals(1, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.removePinnedTile("https://example.com")
         assertEquals(0, pinnedTileRepo.customTilesSize)
 
-        verify(observerSpy, times(3)).onChanged(any())
+        assertEquals(3, observer.callCount)
     }
 
     @Test
@@ -182,5 +178,17 @@ class PinnedTileRepoTest {
         val expectedAddedIndex = featuredBundled.size // index of first custom tile
         val actualAddedIndex = actualTiles.keys.indexOf(addedTileURL)
         assertEquals(expectedAddedIndex, actualAddedIndex)
+    }
+
+    private class CountingObserver<T>(
+        private val assertValue: (T) -> Unit
+    ) : Observer<T> {
+        var callCount = 0
+            private set
+
+        override fun onChanged(value: T) {
+            callCount++
+            assertValue(value)
+        }
     }
 }

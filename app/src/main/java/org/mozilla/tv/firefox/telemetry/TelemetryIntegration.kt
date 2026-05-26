@@ -408,6 +408,7 @@ open class TelemetryIntegration protected constructor(
         TileSource.NEWS -> Value.TILE_BUNDLED
         TileSource.SPORTS -> Value.TILE_BUNDLED
         TileSource.MUSIC -> Value.TILE_BUNDLED
+        TileSource.TABS -> Value.TILE_CUSTOM // Treat tabs as custom for now or add a new type
     }
 
     fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()

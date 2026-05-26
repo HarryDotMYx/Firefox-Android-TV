@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import android.util.Log
 import mozilla.components.service.fretboard.Fretboard
 import mozilla.components.service.fretboard.ValuesProvider
 import mozilla.components.service.fretboard.source.kinto.KintoExperimentSource
@@ -18,6 +19,7 @@ import org.mozilla.tv.firefox.utils.HttpUrlConnectionWrapper
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 
+const val LOG_TAG = "FretboardProvider"
 const val EXPERIMENTS_JSON_FILENAME = "experiments.json"
 const val EXPERIMENTS_BASE_URL = "https://firefox.settings.services.mozilla.com/v1"
 const val EXPERIMENTS_BUCKET_NAME = "main"
@@ -55,7 +57,16 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
      * Asynchronously requests new experiments from the server and
      * saves them to local storage
      */
-    fun updateExperiments() = launch(Dispatchers.IO) { fretboard.updateExperiments() }
+    fun updateExperiments() = launch(Dispatchers.IO) {
+        // Experiments service is decommissioned, disabling updates to avoid 404 errors.
+        /*
+        try {
+            fretboard.updateExperiments()
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Failed to update experiments: " + e.message)
+        }
+        */
+    }
 
     /**
      * Synchronously loads experiments from local storage.

@@ -10,10 +10,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.spy
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 import org.mozilla.tv.firefox.helpers.ext.assertValuesWithReceiver
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
 
@@ -23,13 +19,10 @@ class LiveDataPostIfNewTest {
     @get:Rule val rule = PreventLiveDataMainLooperCrashRule()
 
     private lateinit var source: MutableLiveData<Int?>
-    private lateinit var observerSpy: Observer<Int?>
 
     @Before
     fun setup() {
         source = MutableLiveData()
-        observerSpy = spy(Observer { /* only used to verify call count */ })
-        source.observeForever(observerSpy)
     }
 
     @Test
@@ -61,9 +54,13 @@ class LiveDataPostIfNewTest {
     fun `GIVEN previous state was null WHEN new state is pushed THEN new state should be emitted`() {
         source.value = null
         source.postIfNew(1)
-        observerSpy = spy(Observer { assertEquals(1, it) })
+        var callCount = 0
 
-        source.observeForever(observerSpy)
-        verify(observerSpy, times(1)).onChanged(any())
+        source.observeForever(Observer {
+            callCount++
+            assertEquals(1, it)
+        })
+
+        assertEquals(1, callCount)
     }
 }

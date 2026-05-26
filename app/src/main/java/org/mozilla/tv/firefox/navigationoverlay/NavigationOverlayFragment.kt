@@ -46,7 +46,9 @@ import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.isKeyCodeSelect
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
+import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.hint.HintViewModel
@@ -115,8 +117,18 @@ class NavigationOverlayFragment : Fragment() {
                 context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
             }
             NavigationEvent.LOAD_TILE -> {
-                (activity as MainActivity).onNonTextInputUrlEntered(value!!)
-                context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
+                val tile = navigationOverlayViewModel.pinnedTiles.blockingFirst().tileList.find { it.url == value }
+                    ?: navigationOverlayViewModel.tabsChannel.blockingFirst().tileList.find { it.url == value }
+
+                if (tile?.tileSource == TileSource.TABS) {
+                    val session = context?.serviceLocator?.sessionManager?.sessions?.find { it.id == tile.id }
+                    if (session != null) {
+                        serviceLocator.screenController.selectSession(parentFragmentManager, session)
+                    }
+                } else {
+                    (activity as MainActivity).onNonTextInputUrlEntered(value!!)
+                }
+                serviceLocator.screenController.showNavigationOverlay(parentFragmentManager, false)
             }
             NavigationEvent.SETTINGS_DATA_COLLECTION -> {
                 serviceLocator.screenController.showSettingsScreen(parentFragmentManager, SettingsScreen.DATA_COLLECTION)
@@ -145,6 +157,7 @@ class NavigationOverlayFragment : Fragment() {
     private val newsChannel: DefaultChannel get() = channelReferenceContainer!!.newsChannel
     private val sportsChannel: DefaultChannel get() = channelReferenceContainer!!.sportsChannel
     private val musicChannel: DefaultChannel get() = channelReferenceContainer!!.musicChannel
+    private val tabsChannel: DefaultChannel get() = channelReferenceContainer!!.tabsChannel
 
     private var rootView: View? = null
 
@@ -222,6 +235,7 @@ class NavigationOverlayFragment : Fragment() {
         canShowUnpinToast = true
 
         channelReferenceContainer = ChannelReferenceContainer(binding.channelsContainer, createChannelFactory()).also {
+            binding.channelsContainer.addView(it.tabsChannel.channelContainer)
             binding.channelsContainer.addView(it.pinnedTileChannel.channelContainer)
             binding.channelsContainer.addView(it.newsChannel.channelContainer)
             binding.channelsContainer.addView(it.sportsChannel.channelContainer)
@@ -241,6 +255,10 @@ class NavigationOverlayFragment : Fragment() {
                 .addTo(compositeDisposable)
         observeChannelVisibility()
             .forEach { compositeDisposable.add(it) }
+        navigationOverlayViewModel.tabsChannel
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { tabsChannel.setContents(it.tileList) }
+            .addTo(compositeDisposable)
         observeTvGuideTiles()
             .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarBinding.root, animate = false)
@@ -391,7 +409,8 @@ class NavigationOverlayFragment : Fragment() {
             observeVisibility(navigationOverlayViewModel.pinnedTiles, pinnedTileChannel),
             observeVisibility(navigationOverlayViewModel.newsChannel, newsChannel),
             observeVisibility(navigationOverlayViewModel.sportsChannel, sportsChannel),
-            observeVisibility(navigationOverlayViewModel.musicChannel, musicChannel)
+            observeVisibility(navigationOverlayViewModel.musicChannel, musicChannel),
+            observeVisibility(navigationOverlayViewModel.tabsChannel, tabsChannel)
         )
     }
     private fun observeRequestFocus(): Disposable {
@@ -545,5 +564,16 @@ private class ChannelReferenceContainer(
         parent = channelContainerView,
         id = R.id.music_channel,
         channelConfig = ChannelConfig.getTvGuideConfig(channelContainerView.context)
+    )
+
+    val tabsChannel = channelFactory.createChannel(
+        parent = channelContainerView,
+        id = R.id.tabs_channel,
+        channelConfig = ChannelConfig(
+            onClickTelemetry = { /* No telemetry for now */ },
+            itemsMayBeRemoved = true,
+            isEnabledInCurrentExperiment = true,
+            enabledInLocales = KillswitchLocales.All
+        )
     )
 }

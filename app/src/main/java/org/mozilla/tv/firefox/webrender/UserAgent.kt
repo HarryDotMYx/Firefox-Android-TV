@@ -14,6 +14,9 @@ import android.os.Build
 import androidx.annotation.VisibleForTesting
 import android.text.TextUtils
 
+private const val MINIMUM_CHROME_VERSION = "148.0.7778.178"
+private const val MINIMUM_CHROME_MAJOR_VERSION = 148
+
 /** A collection of user agent functionality. */
 object UserAgent {
     /**
@@ -43,8 +46,8 @@ object UserAgent {
         val tokens = existingUAString.substring(start).split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         for (i in tokens.indices) {
-            if (tokens[i].startsWith("Chrome")) {
-                tokens[i] = focusToken + " " + tokens[i]
+            if (tokens[i].startsWith("Chrome/")) {
+                tokens[i] = focusToken + " " + withMinimumChromeVersion(tokens[i])
 
                 return TextUtils.join(" ", tokens)
             }
@@ -79,5 +82,18 @@ object UserAgent {
         uaBuilder.append(getUABrowserString(systemUserAgent, focusToken))
 
         return uaBuilder.toString()
+    }
+
+    private fun withMinimumChromeVersion(chromeToken: String): String {
+        val majorVersion = chromeToken
+            .removePrefix("Chrome/")
+            .substringBefore(".")
+            .toIntOrNull()
+
+        return if (majorVersion == null || majorVersion < MINIMUM_CHROME_MAJOR_VERSION) {
+            "Chrome/$MINIMUM_CHROME_VERSION"
+        } else {
+            chromeToken
+        }
     }
 }

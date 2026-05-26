@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.ext.getDimenPixelSize
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import java.io.File
 
-enum class TileSource { BUNDLED, CUSTOM, NEWS, SPORTS, MUSIC }
+enum class TileSource { BUNDLED, CUSTOM, NEWS, SPORTS, MUSIC, TABS }
 
 /**
  * Backing data for a [RecyclerView] item in a channel
@@ -48,6 +48,8 @@ data class ChannelTile(
                 context.resources.getString(R.string.sports_channel_remove_title, title)
             TileSource.MUSIC ->
                 context.resources.getString(R.string.music_channel_remove_title, title)
+            TileSource.TABS ->
+                context.resources.getString(R.string.pinned_tiles_channel_remove_title, title) // Fallback
         }
     }
 
