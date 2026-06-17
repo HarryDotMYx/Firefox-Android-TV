@@ -23,8 +23,15 @@ private val logger = Logger("Search")
  *
  * @property replacements a map specifying which plugins to replace e.g.
  * mapOf("google" to "google-fftv") to replace google with google-fftv.
+ * @property additionalEngineIdentifiers extra bundled search plugin identifiers
+ * (asset file names without the .xml extension) that should always be loaded,
+ * independent of the user's locale. This is how we make worldwide search engines
+ * (Bing, DuckDuckGo, Yandex, Baidu, etc.) available everywhere.
  */
-class SearchEngineProviderWrapper(private val replacements: Map<String, String>) : SearchEngineProvider {
+class SearchEngineProviderWrapper(
+    private val replacements: Map<String, String>,
+    private val additionalEngineIdentifiers: List<String> = emptyList()
+) : SearchEngineProvider {
 
     val myLocalizationProvider = object : SearchLocalizationProvider {
         override suspend fun determineRegion() = SearchLocalization(
@@ -36,7 +43,7 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
 
     private val inner = AssetsSearchEngineProvider(
         localizationProvider = myLocalizationProvider,
-        additionalIdentifiers = replacements.values.toList()
+        additionalIdentifiers = (replacements.values + additionalEngineIdentifiers).distinct()
     )
 
     override suspend fun loadSearchEngines(context: Context): SearchEngineList {

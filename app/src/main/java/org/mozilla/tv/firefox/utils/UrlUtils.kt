@@ -70,8 +70,16 @@ object UrlUtils {
 
     @JvmStatic
     fun createSearchUrl(context: Context, searchTerm: String): String {
-        val searchEngine = context.serviceLocator.searchEngineManager
-            .getDefaultSearchEngine(context)
+        val searchEngineManager = context.serviceLocator.searchEngineManager
+
+        // Honor the user's chosen search engine if one has been selected, otherwise fall
+        // back to the locale default. The selected name matches the engine's ShortName.
+        val selectedEngineName = Settings.getInstance(context).defaultSearchEngineName
+        val searchEngine = if (selectedEngineName.isNullOrBlank()) {
+            searchEngineManager.getDefaultSearchEngine(context)
+        } else {
+            searchEngineManager.getDefaultSearchEngine(context, selectedEngineName)
+        }
 
         return searchEngine.buildSearchUrl(searchTerm)
     }

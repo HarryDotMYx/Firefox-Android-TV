@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>YouTube</ShortName>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=</Image>
+  <Url type="application/x-suggestions+json" method="GET" template="https://suggestqueries.google.com/complete/search?client=youtube&amp;ds=yt&amp;q={searchTerms}"/>
+  <Url type="text/html" method="GET" template="https://www.youtube.com/results?search_query={searchTerms}"/>
+  <SearchForm>https://www.youtube.com</SearchForm>
+</SearchPlugin>
