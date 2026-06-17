@@ -11,9 +11,9 @@ import android.util.AttributeSet
 import androidx.annotation.CheckResult
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.kotlin.addTo
 import org.mozilla.tv.firefox.R
 import java.util.concurrent.TimeUnit
 

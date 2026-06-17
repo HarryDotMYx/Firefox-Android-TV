@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.hint
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 /**
  * Contains backing data for hint bar

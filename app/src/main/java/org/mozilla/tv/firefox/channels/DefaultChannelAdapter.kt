@@ -17,11 +17,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
-import io.reactivex.subjects.Subject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.Subject
 import org.mozilla.tv.firefox.databinding.DialogChannelTilesBinding
 import org.mozilla.tv.firefox.databinding.HomeTileBinding
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import org.mozilla.tv.firefox.R
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {

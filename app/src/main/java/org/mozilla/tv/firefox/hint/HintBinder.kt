@@ -13,7 +13,7 @@ import android.text.style.ImageSpan
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 import mozilla.components.support.ktx.android.util.dpToPx
 
 private const val IMAGE = "\$IMAGE"

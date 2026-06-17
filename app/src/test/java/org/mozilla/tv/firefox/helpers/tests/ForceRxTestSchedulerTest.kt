@@ -4,9 +4,9 @@
 
 package org.mozilla.tv.firefox.helpers.tests
 
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.junit.BeforeClass
 import org.junit.Test
 import org.mozilla.tv.firefox.helpers.RxTestHelper

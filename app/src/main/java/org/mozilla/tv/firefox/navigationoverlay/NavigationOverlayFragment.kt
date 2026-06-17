@@ -24,11 +24,11 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.transition.Fade
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.kotlin.addTo
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayTopNavBinding
 import org.mozilla.tv.firefox.databinding.HintBarBinding

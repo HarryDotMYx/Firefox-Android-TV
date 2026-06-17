@@ -8,7 +8,7 @@ import androidx.test.core.app.ApplicationProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

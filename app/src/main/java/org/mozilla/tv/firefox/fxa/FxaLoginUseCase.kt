@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.fxa
 
 import android.net.Uri
 import androidx.fragment.app.FragmentManager
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

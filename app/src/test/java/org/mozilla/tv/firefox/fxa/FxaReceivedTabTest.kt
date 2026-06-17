@@ -9,7 +9,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.TabData
 import org.junit.Before

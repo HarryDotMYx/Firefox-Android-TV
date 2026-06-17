@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.fxa
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.TabData
 import mozilla.components.support.base.log.logger.Logger

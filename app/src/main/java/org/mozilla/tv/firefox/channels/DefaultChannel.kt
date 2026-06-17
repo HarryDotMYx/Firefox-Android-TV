@@ -8,7 +8,7 @@ import org.mozilla.tv.firefox.databinding.DefaultChannelBinding
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 /**
  * A data container representing a standard channel on the homescreen. This class references a Context and must

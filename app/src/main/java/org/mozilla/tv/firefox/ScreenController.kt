@@ -10,8 +10,8 @@ import android.view.KeyEvent
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition

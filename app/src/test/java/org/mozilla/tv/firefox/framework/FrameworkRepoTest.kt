@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.framework
 
 import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener
-import io.reactivex.observers.TestObserver
+import io.reactivex.rxjava3.observers.TestObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
