@@ -33,6 +33,7 @@ import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayTopNavBinding
 import org.mozilla.tv.firefox.databinding.HintBarBinding
 import kotlinx.coroutines.Job
+import mozilla.components.support.ktx.android.view.showKeyboard
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
@@ -416,7 +417,14 @@ class NavigationOverlayFragment : Fragment() {
     private fun observeRequestFocus(): Disposable {
         return navigationOverlayViewModel.focusView
                 .subscribe { viewToFocus ->
-                    rootView?.findViewById<View>(viewToFocus)?.requestFocus()
+                    val focusTarget = rootView?.findViewById<View>(viewToFocus)
+                    focusTarget?.requestFocus()
+                    // When the user presses back from a web page, focus lands on the URL bar
+                    // (see NavigationOverlayViewModel.focusView). Auto-open the soft keyboard so
+                    // they can immediately type a new address or search query.
+                    if (viewToFocus == R.id.navUrlInput) {
+                        focusTarget?.showKeyboard()
+                    }
                 }
     }
 
