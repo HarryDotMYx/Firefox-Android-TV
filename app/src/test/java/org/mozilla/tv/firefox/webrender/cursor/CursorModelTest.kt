@@ -75,7 +75,7 @@ class CursorModelTest {
         currentActiveScreen.onNext(ScreenControllerStateMachine.ActiveScreen.SETTINGS)
         pushAndAdvanceTime(KeyEvent.KEYCODE_BUTTON_SELECT)
 
-        assertEquals(0, events.valueCount())
+        assertEquals(0, events.values().size)
     }
 
     @Test

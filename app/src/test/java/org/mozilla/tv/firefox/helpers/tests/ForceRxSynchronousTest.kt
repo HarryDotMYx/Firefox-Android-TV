@@ -37,6 +37,6 @@ class ForceRxSynchronousTest {
     }
 }
 
-private fun <T> Observable<T>.toThreadName(): String = this
+private fun <T : Any> Observable<T>.toThreadName(): String = this
     .map { Thread.currentThread().name }
     .blockingFirst()
