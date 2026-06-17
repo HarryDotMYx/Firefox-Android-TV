@@ -19,7 +19,26 @@ private val replacements = mapOf(
     "google-b-m" to AMAZON_SEARCH_CODE,
     "google-b-1-m" to AMAZON_SEARCH_CODE_US_ONLY
 )
-private val engineProvider = SearchEngineProviderWrapper(replacements)
+
+/**
+ * Worldwide search engines bundled in assets/searchplugins. These identifiers match the
+ * plugin file names (without the .xml extension) and are always loaded, regardless of the
+ * user's locale, so that every Android device can search with any of them.
+ */
+private val worldwideEngineIdentifiers = listOf(
+    "bing-intl",
+    "duckduckgo-intl",
+    "yahoo-intl",
+    "yandex-intl",
+    "baidu-intl",
+    "ecosia-intl",
+    "brave-intl",
+    "startpage-intl",
+    "wikipedia-intl",
+    "youtube-intl"
+)
+
+private val engineProvider = SearchEngineProviderWrapper(replacements, worldwideEngineIdentifiers)
 
 /**
  * Encapsulates [SearchEngineManager] setup in order to clean up the

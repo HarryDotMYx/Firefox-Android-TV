@@ -16,10 +16,10 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.core.view.WindowCompat
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.kotlin.addTo
 import io.sentry.Sentry
 import org.mozilla.tv.firefox.databinding.ActivityMainBinding
 import mozilla.components.browser.session.Session

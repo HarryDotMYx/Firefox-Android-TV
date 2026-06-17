@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo

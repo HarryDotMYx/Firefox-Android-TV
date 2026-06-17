@@ -9,8 +9,8 @@ import android.app.Dialog
 import android.content.Context
 import androidx.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.databinding.TabsOnboardingBinding
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config

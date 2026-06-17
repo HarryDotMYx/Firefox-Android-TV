@@ -7,8 +7,8 @@ package org.mozilla.tv.firefox.framework
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 /**
  * A model to hold state related to the Android framework.

@@ -8,10 +8,10 @@ import android.view.KeyEvent
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.reactivex.Observable
-import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.TestScheduler
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -75,7 +75,7 @@ class CursorModelTest {
         currentActiveScreen.onNext(ScreenControllerStateMachine.ActiveScreen.SETTINGS)
         pushAndAdvanceTime(KeyEvent.KEYCODE_BUTTON_SELECT)
 
-        assertEquals(0, events.valueCount())
+        assertEquals(0, events.values().size)
     }
 
     @Test

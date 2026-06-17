@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
@@ -108,7 +109,7 @@ sealed class ImageSetStrategy {
             // Picasso doesn't support SVGs, so we need to do a little extra work to be
             // able to apply our transformation
             // See https://github.com/square/picasso/issues/1109
-            val bitmap = imageView.context.resources.getDrawable(id, null)
+            val bitmap = AppCompatResources.getDrawable(imageView.context, id)!!
                 .toBitmap()
                 .let {
                     val transformation = transformation

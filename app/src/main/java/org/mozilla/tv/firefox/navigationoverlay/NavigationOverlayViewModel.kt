@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.navigationoverlay
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen

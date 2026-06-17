@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ext.isUriYouTubeTvVideo

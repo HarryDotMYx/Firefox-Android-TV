@@ -7,8 +7,8 @@ package org.mozilla.tv.firefox
 import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.Subject
 import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
 import mozilla.components.lib.fetch.okhttp.OkHttpClient

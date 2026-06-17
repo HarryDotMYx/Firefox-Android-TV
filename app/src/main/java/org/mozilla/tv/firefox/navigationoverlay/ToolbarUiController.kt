@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.forEach
 import androidx.fragment.app.FragmentManager
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayOrigBinding
 import org.mozilla.tv.firefox.databinding.FragmentNavigationOverlayTopNavBinding
 import org.mozilla.tv.firefox.databinding.TooltipBinding

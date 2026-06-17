@@ -9,10 +9,10 @@ import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.MotionEvent
 import androidx.annotation.CheckResult
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.Observables
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.ext.isKeyCodeSelect

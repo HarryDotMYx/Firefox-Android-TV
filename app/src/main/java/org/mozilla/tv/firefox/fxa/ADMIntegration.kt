@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.fxa
 
 import android.app.Application
 import com.amazon.device.messaging.ADM
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import mozilla.components.concept.push.PushProcessor
 import mozilla.components.concept.sync.Device
 import mozilla.components.concept.sync.TabData

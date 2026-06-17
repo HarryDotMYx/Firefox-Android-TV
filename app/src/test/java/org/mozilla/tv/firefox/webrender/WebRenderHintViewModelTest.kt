@@ -7,9 +7,9 @@ package org.mozilla.tv.firefox.webrender
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.reactivex.observers.TestObserver
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -74,72 +74,72 @@ class WebRenderHintViewModelTest {
     fun `GIVEN current url is not a YouTube TV video WHEN active screen changes to web render THEN hints should be displayed`() {
 
         currentActiveScreen.onNext(ActiveScreen.SETTINGS)
-        assertEquals(0, displayed.valueCount())
+        assertEquals(0, displayed.values().size)
 
         currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
         assertEquals(true, displayed.values().last())
 
         currentActiveScreen.onNext(ActiveScreen.SETTINGS)
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
     }
 
     @Test
     fun `GIVEN current url is not a YouTube TV video WHEN cursor up and down events are received THEN hints should be hidden`() {
 
         pushCursorMove(Direction.UP)
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
         assertEquals(false, displayed.values().last())
 
         pushCursorMove(Direction.LEFT)
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
 
         pushScrolledToEdge(Direction.DOWN)
-        assertEquals(2, displayed.valueCount())
+        assertEquals(2, displayed.values().size)
         assertEquals(true, displayed.values().last())
 
         pushCursorMove(Direction.DOWN)
-        assertEquals(3, displayed.valueCount())
+        assertEquals(3, displayed.values().size)
         assertEquals(false, displayed.values().last())
 
         pushCursorMove(Direction.RIGHT)
-        assertEquals(3, displayed.valueCount())
+        assertEquals(3, displayed.values().size)
     }
 
     @Test
     fun `GIVEN current url is not a YouTube TV video WHEN cursor scrolls past top or bottom of page THEN hints should be displayed`() {
 
         pushScrolledToEdge(Direction.UP)
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
         assertEquals(true, displayed.values().last())
 
         pushScrolledToEdge(Direction.LEFT)
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
 
         pushCursorMove(Direction.DOWN)
-        assertEquals(2, displayed.valueCount())
+        assertEquals(2, displayed.values().size)
         assertEquals(false, displayed.values().last())
 
         pushScrolledToEdge(Direction.DOWN)
-        assertEquals(3, displayed.valueCount())
+        assertEquals(3, displayed.values().size)
         assertEquals(true, displayed.values().last())
 
         pushScrolledToEdge(Direction.RIGHT)
-        assertEquals(3, displayed.valueCount())
+        assertEquals(3, displayed.values().size)
     }
 
     @Test
     fun `GIVEN current url is not a YouTube TV video WHEN loading completes THEN hints should be displayed`() {
 
         sessionRepoState.onNext(fakeSessionState(loading = true))
-        assertEquals(0, displayed.valueCount())
+        assertEquals(0, displayed.values().size)
 
         sessionRepoState.onNext(fakeSessionState(loading = false))
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
         assertEquals(true, displayed.values().last())
 
         sessionRepoState.onNext(fakeSessionState(loading = true))
-        assertEquals(1, displayed.valueCount())
+        assertEquals(1, displayed.values().size)
     }
 
     @Test

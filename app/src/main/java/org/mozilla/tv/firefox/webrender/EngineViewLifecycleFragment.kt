@@ -9,8 +9,8 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import androidx.annotation.UiThread
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.feature.session.SessionFeature
 import org.mozilla.tv.firefox.R

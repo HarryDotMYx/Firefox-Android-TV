@@ -11,12 +11,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.reactivex.Observable
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.observers.TestObserver
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.BeforeClass
@@ -124,7 +124,7 @@ class PinnedTileTest {
 
     @Test
     fun `WHEN repo emits a successful load THEN view model should emit a list of same number of tiles`() {
-        assertEquals(1, testObserver.valueCount())
+        assertEquals(1, testObserver.values().size)
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
     }
 
@@ -132,7 +132,7 @@ class PinnedTileTest {
     fun `WHEN repo emits an updated list after add THEN view model should emit an updated list`() {
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
-        assertEquals(2, testObserver.valueCount())
+        assertEquals(2, testObserver.values().size)
         assertEquals(DEFAULT_PINNED_TILE_COUNT + 1, testObserver.values().last().tileList.size)
     }
 
@@ -140,7 +140,7 @@ class PinnedTileTest {
     fun `WHEN repo emits an updated list after remove THEN view model should emit an updated list`() {
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
         pinnedTileRepo.removePinnedTile("https://www.instagram.com/")
-        assertEquals(2, testObserver.valueCount())
+        assertEquals(2, testObserver.values().size)
         assertEquals(DEFAULT_PINNED_TILE_COUNT - 1, testObserver.values().last().tileList.size)
     }
 
@@ -148,7 +148,7 @@ class PinnedTileTest {
     fun `WHEN repo fails to remove an item THEN view model should emit nothing`() {
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
         pinnedTileRepo.removePinnedTile("https://example.com/")
-        assertEquals(1, testObserver.valueCount())
+        assertEquals(1, testObserver.values().size)
         assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
     }
 

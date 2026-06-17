@@ -1,8 +1,8 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
-import io.reactivex.observers.TestObserver
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
+import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.Subject
 import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.test.eq
 import org.junit.Before

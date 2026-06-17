@@ -4,15 +4,16 @@
 
 package org.mozilla.tv.firefox.helpers
 
-import io.reactivex.Scheduler
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.functions.Function
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
+import io.reactivex.rxjava3.functions.Function
+import io.reactivex.rxjava3.functions.Supplier
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.junit.BeforeClass
-import java.util.concurrent.Callable
 import org.junit.ClassRule
+import java.util.concurrent.Callable
 
 object RxTestHelper {
 
@@ -75,7 +76,10 @@ object RxTestHelper {
 }
 
 private fun setRxScheduler(scheduleTo: Scheduler) {
-    val initHandler = Function<Callable<Scheduler>, Scheduler> { scheduleTo }
+    // RxJava 3 uses Supplier for its init-scheduler handlers...
+    val initHandler = Function<Supplier<Scheduler>, Scheduler> { scheduleTo }
+    // ...but RxAndroid 3.0.2 still expects the legacy Callable-based handler.
+    val androidInitHandler = Function<Callable<Scheduler>, Scheduler> { scheduleTo }
     val setHandler = Function<Scheduler, Scheduler> { scheduleTo }
 
     RxJavaPlugins.setInitIoSchedulerHandler(initHandler)
@@ -90,6 +94,6 @@ private fun setRxScheduler(scheduleTo: Scheduler) {
     RxJavaPlugins.setInitSingleSchedulerHandler(initHandler)
     RxJavaPlugins.setSingleSchedulerHandler(setHandler)
 
-    RxAndroidPlugins.setInitMainThreadSchedulerHandler(initHandler)
+    RxAndroidPlugins.setInitMainThreadSchedulerHandler(androidInitHandler)
     RxAndroidPlugins.setMainThreadSchedulerHandler(setHandler)
 }

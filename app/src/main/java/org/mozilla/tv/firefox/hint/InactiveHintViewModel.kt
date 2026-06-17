@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.hint
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 /**
  * Used when a user is part of an experiment that does not show the hint bar
