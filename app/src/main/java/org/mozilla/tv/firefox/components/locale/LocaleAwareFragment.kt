@@ -20,7 +20,7 @@ abstract class LocaleAwareFragment : Fragment() {
         super.onResume()
 
         LocaleManager.getInstance()
-            .correctLocale(context, resources, resources.configuration)
+            .correctLocale(requireContext(), resources, resources.configuration)
 
         if (cachedLocale == null) {
             cachedLocale = Locale.getDefault()
