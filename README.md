@@ -1,4 +1,8 @@
-> ⚠️ Firefox for Android TV has been updated by **PGMAFX**. This app is now optimized for use on all Android TV devices.
+> ⚠️ This fork (maintained by **PGMAFX**) has been modernized:
+> - The app source is now **fully Kotlin** (the legacy Java was migrated/removed; only auto-generated files remain in Java).
+> - Tooling and dependencies are up to date (Kotlin 2.3, Android Gradle Plugin 9, Gradle 9, **RxJava 3**, AndroidX).
+> - It installs on **all Android form factors** — phones, tablets and TV — not just Android TV / Fire TV (`android.software.leanback` is no longer required). The UI is still optimized for TV remote navigation.
+> - Search ships with many **worldwide engines** (Google, Bing, DuckDuckGo, Yahoo, Yandex, Baidu, Ecosia, Brave, Startpage, Wikipedia, YouTube).
 
 # Firefox for Android TV
 
@@ -27,7 +31,8 @@ Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participatio
 
 ## Build instructions
 Dependencies:
-- Java 8, *not the latest version* (for building via the command line)
+- JDK 21 (the Gradle build runs on a JetBrains Runtime 21 toolchain — see `gradle/gradle-daemon-jvm.properties`)
+- Android SDK with the `compileSdk` platform (API 36) and build-tools installed
 
 1. Clone the repository:
 
@@ -51,12 +56,16 @@ adb connect <IP address>:5555
 ```
 
 And then install via Android Studio or adb. Only a single development device
-can be connected to a Fire TV at a time. This codebase currently requires
-Android 14 / API 34 or newer, so older Fire TV devices and emulator images
-will reject the APK during install.
+can be connected to a Fire TV at a time. This codebase requires
+**Android 8.0 / API 26** or newer (`minSdk = 26`), so devices and emulator
+images older than that will reject the APK during install.
 
-If using an emulator, use an Android TV device image running API 34 or newer.
-You can press `cmd + m` to simulate a menu button press.
+Because `android.software.leanback` is no longer required, the app also installs
+on **phones and tablets** (alongside Android TV / Fire TV); the interface is
+still designed for TV remote/D-pad navigation.
+
+If using an emulator, an Android TV device image running API 26 or newer is
+recommended. You can press `cmd + m` to simulate a menu button press.
 
 ### Unit Testing
 To run a reasonable subset of the unit tests, we recommend:
