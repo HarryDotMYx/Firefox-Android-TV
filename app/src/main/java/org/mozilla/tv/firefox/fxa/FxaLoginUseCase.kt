@@ -8,9 +8,8 @@ import android.net.Uri
 import androidx.fragment.app.FragmentManager
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import org.mozilla.tv.firefox.utils.AppCoroutineScope
 import kotlinx.coroutines.launch
 import mozilla.components.concept.sync.AuthType
 import mozilla.components.service.fxa.FxaAuthData
@@ -40,7 +39,6 @@ private val logger = Logger("FxaLoginUseCase")
  *           |
  *    FxaLoginUseCase
  */
-@OptIn(DelicateCoroutinesApi::class)
 class FxaLoginUseCase(
     private val fxaRepo: FxaRepo,
     private val sessionRepo: SessionRepo,
@@ -56,7 +54,7 @@ class FxaLoginUseCase(
      */
     fun beginLogin(fragmentManager: FragmentManager) {
         // TODO: should we throw an error if we're already authenticated when this is called?
-        GlobalScope.launch(Dispatchers.Main) { // main thread: we modify UI state.
+        AppCoroutineScope.launch(Dispatchers.Main) { // main thread: we modify UI state.
             // a-c#3713: this await will never resume if the user is already logged in.
             val loginUri = fxaRepo.beginLoginInternalAsync().await()
 

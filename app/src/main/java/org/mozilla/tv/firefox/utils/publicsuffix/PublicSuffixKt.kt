@@ -5,12 +5,10 @@
 package org.mozilla.tv.firefox.utils.publicsuffix
 
 import android.content.Context
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import org.mozilla.tv.firefox.utils.AppCoroutineScope
 import kotlinx.coroutines.launch
 
 /** A helper to allow [PublicSuffix] to call Kotlin code: converting the whole file didn't seem right. */
-@OptIn(DelicateCoroutinesApi::class)
 internal object PublicSuffixKt {
 
     // We want to execute this on our existing common pool, which only Kotlin has access to so we
@@ -19,6 +17,6 @@ internal object PublicSuffixKt {
     @JvmStatic
     fun init(context: Context) {
         // We don't care for the result: we just want to call this method so it caches the file from disk.
-        GlobalScope.launch { PublicSuffixPatterns.getExactSet(context) }
+        AppCoroutineScope.launch { PublicSuffixPatterns.getExactSet(context) }
     }
 }

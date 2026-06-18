@@ -10,8 +10,7 @@ import android.graphics.BitmapFactory
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import org.mozilla.tv.firefox.utils.AppCoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -81,7 +80,6 @@ private val BITMAP_FACTORY_OPTIONS = BitmapFactory.Options().apply {
  *
  * This class is thread-safe: see [uuidToFileSystemMutex] javadoc for details.
  */
-@OptIn(DelicateCoroutinesApi::class)
 object PinnedTileScreenshotStore {
 
     @VisibleForTesting const val DIR = "home_screenshots"
@@ -98,7 +96,7 @@ object PinnedTileScreenshotStore {
 
     /** @param uuid a unique identifier for this screenshot. */
     @AnyThread
-    fun saveAsync(context: Context, uuid: UUID, screenshot: Bitmap) = GlobalScope.launch {
+    fun saveAsync(context: Context, uuid: UUID, screenshot: Bitmap) = AppCoroutineScope.launch {
         if (!isScreenshotAcceptableAsHomeTile(screenshot)) {
             // We won't save this image, meaning we'll return null when we try to read it.
             // At the time of writing, this will fall back to placeholders.
@@ -118,7 +116,7 @@ object PinnedTileScreenshotStore {
 
     /** @param a unique identifier for this screenshot. */
     @AnyThread
-    fun removeAsync(context: Context, uuid: UUID) = GlobalScope.launch {
+    fun removeAsync(context: Context, uuid: UUID) = AppCoroutineScope.launch {
         getMutex(uuid).withLock {
             getFileForUUID(context, uuid).delete()
         }

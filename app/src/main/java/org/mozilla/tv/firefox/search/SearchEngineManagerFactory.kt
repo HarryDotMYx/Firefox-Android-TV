@@ -5,8 +5,7 @@
 package org.mozilla.tv.firefox.search
 
 import android.app.Application
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import org.mozilla.tv.firefox.utils.AppCoroutineScope
 import kotlinx.coroutines.launch
 import mozilla.components.browser.search.SearchEngineManager
 import org.mozilla.tv.firefox.search.SearchEngineManagerFactory.AMAZON_SEARCH_CODE
@@ -44,7 +43,6 @@ private val engineProvider = SearchEngineProviderWrapper(replacements, worldwide
  * Encapsulates [SearchEngineManager] setup in order to clean up the
  * [ServiceLocator]
  */
-@OptIn(DelicateCoroutinesApi::class)
 object SearchEngineManagerFactory {
 
     val AMAZON_SEARCH_CODE = "google-b-amzftv"
@@ -52,7 +50,7 @@ object SearchEngineManagerFactory {
 
     fun create(app: Application): SearchEngineManager {
         return SearchEngineManager(listOf(engineProvider)).apply {
-            GlobalScope.launch {
+            AppCoroutineScope.launch {
                 @Suppress("DeferredResultUnused")
                 loadAsync(app) // Call is used only for its side effects
             }
