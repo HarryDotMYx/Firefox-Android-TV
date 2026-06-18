@@ -18,6 +18,7 @@ import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.TurboMode
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.webrender.EngineViewCache
 
 /**
@@ -156,6 +157,20 @@ class SessionRepo(
 
     fun selectSession(session: Session) {
         sessionManager.select(session)
+    }
+
+    /**
+     * Opens a new browser session (a "tab") for [url], adds it to the [SessionManager] and selects
+     * it, returning the newly created [Session]. The default [url] opens the home overlay.
+     *
+     * This is the data-layer primitive for multi-tab support: a caller (e.g. a "new tab" action)
+     * can use it to create additional sessions, which are already surfaced by the overlay's tabs
+     * channel and switchable via [selectSession].
+     */
+    fun addSession(url: String = URLs.APP_URL_HOME): Session {
+        val session = Session(initialUrl = url, source = Session.Source.NONE)
+        sessionManager.add(session, selected = true)
+        return session
     }
 
     private val session: Session? get() = sessionManager.selectedSession

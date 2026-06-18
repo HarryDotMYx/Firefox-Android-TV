@@ -111,6 +111,13 @@ existing pattern in `telemetry/TelemetryIntegration.kt`.
 
 1. **Data layer**: introduce multi-session use cases in `SessionRepo` + observe
    selection. No UI change; default behavior identical (one tab).
+   - ✅ **Done:** `SessionRepo.addSession(url)` creates a new session, adds it to
+     the `SessionManager` (selected), and returns it — the missing "new tab"
+     primitive. Covered by `SessionRepoTest`. Tab *switching* already exists via
+     `SessionRepo.selectSession` / `ScreenController.selectSession`, and the
+     overlay already renders open sessions in its tabs channel.
+   - ⏭️ Still to do: a `removeSession(id)` primitive and exposing the selected
+     session as an observable.
 2. **EngineView swap**: re-render selected session (Option A). Verify single-tab
    parity on-device.
 3. **Tab switching**: make the existing tabs channel select tabs.
