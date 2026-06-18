@@ -3,7 +3,8 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- We set focusDown targets in code to avoid the redundancy.  -->
 
@@ -63,7 +64,7 @@
         android:src="@drawable/ic_fxa_login"
         android:visibility="gone"
         android:nextFocusUp="@+id/bannerMoreInfoButton"
-        android:tint="@null"/>
+        app:tint="@null"/>
 
     <!-- Content description is set programmatically.-->
     <ImageButton

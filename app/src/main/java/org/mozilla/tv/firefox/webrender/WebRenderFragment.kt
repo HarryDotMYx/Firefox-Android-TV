@@ -104,7 +104,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun initSession() {
         val sessionUUID = arguments?.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
-        session = context!!.webRenderComponents.sessionManager.findSessionById(sessionUUID) ?: NullSession.create()
+        session = requireContext().webRenderComponents.sessionManager.findSessionById(sessionUUID) ?: NullSession.create()
         session.register(observer = this, owner = this)
     }
 
@@ -237,7 +237,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 .subscribe { engineView!!.scrollByClamped(it.x.toInt(), it.y.toInt()) }
                 .addTo(startStopCompositeDisposable)
 
-        binding.cursorView.setup(context!!.serviceLocator.cursorModel)
+        binding.cursorView.setup(requireContext().serviceLocator.cursorModel)
                 .addTo(startStopCompositeDisposable)
 
         val (hintViewModel, progressBarBottomMargin) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
@@ -263,7 +263,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onDestroyView() {
         mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyEngineView(engineView!!, session)
 
-        context!!.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = null
+        requireContext().serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = null
 
         rootView = null
         _binding = null
@@ -302,7 +302,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             } else {
                 // There's no session (anymore). Let's create a new one.
                 requireWebRenderComponents.sessionManager.add(Session(url), selected = true)
-                requireWebRenderComponents.sessionManager.getOrCreateEngineSession().resetView(activity!!)
+                requireWebRenderComponents.sessionManager.getOrCreateEngineSession().resetView(requireActivity())
             }
         }
     }

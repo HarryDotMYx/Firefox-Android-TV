@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -84,7 +85,7 @@ class DefaultChannelAdapter(
                 val focusRingDrawable: Drawable?
                 val animation: StateListAnimator
                 if (hasFocus) {
-                    focusRingDrawable = context.getDrawable(R.drawable.tile_selected_stroke)
+                    focusRingDrawable = AppCompatResources.getDrawable(context, R.drawable.tile_selected_stroke)
                     animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator_focused)
                     onTileFocused?.invoke()
                 } else {

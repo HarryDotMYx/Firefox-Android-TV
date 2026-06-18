@@ -113,6 +113,7 @@ object ViewUtils {
         showToast(context, text, "bottom")
     }
 
+    @Suppress("InflateParams") // Toasts have no parent view, so null is the correct root.
     private fun showToast(context: Context, text: String, toastLocation: String) {
         val layout = LayoutInflater.from(context).inflate(R.layout.custom_toast, null)
         val textView = layout.findViewById<TextView>(R.id.toast_text)

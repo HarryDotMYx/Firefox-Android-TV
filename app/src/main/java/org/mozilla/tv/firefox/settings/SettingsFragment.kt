@@ -43,10 +43,10 @@ class SettingsFragment : Fragment() {
     private lateinit var serviceLocator: ServiceLocator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        serviceLocator = context!!.serviceLocator
+        serviceLocator = requireContext().serviceLocator
 
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
-        val type: SettingsTile = SettingsScreen.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
+        val type: SettingsTile = SettingsScreen.valueOf(requireArguments().getString(KEY_SETTINGS_TYPE)!!)
         val view = when (type) {
             SettingsScreen.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
             SettingsScreen.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
@@ -123,7 +123,7 @@ class SettingsFragment : Fragment() {
 
         val fxaRepo = serviceLocator.fxaRepo
         binding.buttonFirefoxTabs.setOnClickListener {
-            fxaRepo.showFxaOnboardingScreen(context!!)
+            fxaRepo.showFxaOnboardingScreen(requireContext())
         }
 
         return binding.root
@@ -157,7 +157,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun observeFxaProfile(binding: SettingsScreenFxaProfileBinding): List<Disposable> {
-        val accountState = context!!.serviceLocator.fxaRepo.accountState
+        val accountState = requireContext().serviceLocator.fxaRepo.accountState
 
         return listOf(
             accountState

@@ -11,6 +11,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import io.reactivex.rxjava3.disposables.Disposable
@@ -76,7 +77,7 @@ object HintBinder {
                 val spannableBuilder = SpannableStringBuilder(hint.text)
                 val imageStart = hint.text.indexOf(IMAGE)
                 val imageEnd = imageStart + IMAGE.length
-                val image = hintContainer.context.getDrawable(hint.icon)!!
+                val image = AppCompatResources.getDrawable(hintContainer.context, hint.icon)!!
                 val imageSize = IMAGE_SIZE_DP.dpToPx(resources.displayMetrics)
                 image.setBounds(0, 0, imageSize, imageSize)
                 val imageSpan = ImageSpan(image, ImageSpan.ALIGN_BOTTOM)

@@ -22,6 +22,6 @@ object FirefoxViewModelProviders {
 
     fun of(fragment: Fragment): ViewModelProvider {
         // If we're attempting to retrieve a view model, we should be attached to a context already.
-        return ViewModelProvider(fragment, fragment.context!!.serviceLocator.viewModelFactory)
+        return ViewModelProvider(fragment, fragment.requireContext().serviceLocator.viewModelFactory)
     }
 }
