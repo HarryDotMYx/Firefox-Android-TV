@@ -173,6 +173,15 @@ class SessionRepo(
         return session
     }
 
+    /**
+     * Closes the given browser session (a "tab"), removing it from the [SessionManager]. If the
+     * closed session was the selected one, the manager selects an adjacent session (its standard
+     * behaviour). This is the data-layer primitive behind a "close tab" action.
+     */
+    fun removeSession(session: Session) {
+        sessionManager.remove(session)
+    }
+
     private val session: Session? get() = sessionManager.selectedSession
 
     fun clearBrowsingData(engineViewCache: EngineViewCache) {

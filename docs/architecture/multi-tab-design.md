@@ -116,8 +116,10 @@ existing pattern in `telemetry/TelemetryIntegration.kt`.
      primitive. Covered by `SessionRepoTest`. Tab *switching* already exists via
      `SessionRepo.selectSession` / `ScreenController.selectSession`, and the
      overlay already renders open sessions in its tabs channel.
-   - ⏭️ Still to do: a `removeSession(id)` primitive and exposing the selected
-     session as an observable.
+   - ✅ **Done:** `SessionRepo.removeSession(session)` removes a session from the
+     `SessionManager` (the "close tab" primitive). Covered by `SessionRepoTest`.
+   - ⏭️ Still to do: expose the selected session as an observable (currently the
+     selected session is read on demand via `sessionManager.selectedSession`).
 2. **EngineView swap**: re-render selected session (Option A). Verify single-tab
    parity on-device.
 3. **Tab switching**: make the existing tabs channel select tabs.

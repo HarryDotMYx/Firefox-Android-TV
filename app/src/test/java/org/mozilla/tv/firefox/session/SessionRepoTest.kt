@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.session
 
 import io.mockk.mockk
 import io.mockk.verify
+import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
 import org.junit.Assert.assertEquals
@@ -48,5 +49,14 @@ class SessionRepoTest {
 
         assertEquals(URLs.APP_URL_HOME, session.url)
         verify(exactly = 1) { sessionManager.add(session, selected = true) }
+    }
+
+    @Test
+    fun `WHEN removeSession is called THEN the session is removed from the manager`() {
+        val session = Session(initialUrl = "https://example.com/")
+
+        sessionRepo.removeSession(session)
+
+        verify(exactly = 1) { sessionManager.remove(session) }
     }
 }
