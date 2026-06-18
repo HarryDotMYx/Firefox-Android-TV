@@ -193,7 +193,7 @@ class NavigationOverlayFragment : Fragment() {
         }
 
         binding.bannerMoreInfoButton.setOnClickListener {
-            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(requireContext(), "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
         }
 

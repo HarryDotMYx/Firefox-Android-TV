@@ -166,7 +166,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         // Setup the banner
         binding.bannerMoreInfoButton.setOnClickListener {
-            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(requireContext(), "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(parentFragmentManager, false)
         }
 
